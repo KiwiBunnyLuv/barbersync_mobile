@@ -15,7 +15,6 @@
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/home"
         android:tint="#FFFFFF"
-
         android:scaleType="centerInside" />
 
     <ImageButton
@@ -25,7 +24,7 @@
         android:layout_weight="1"
         android:background="?attr/selectableItemBackground"
         android:scaleType="centerInside"
-        android:src="@drawable/scissors_01"
+        android:src="@drawable/scissors"
         android:tint="#FFFFFF" />
 
     <ImageButton

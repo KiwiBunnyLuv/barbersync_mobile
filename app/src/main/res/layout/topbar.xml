@@ -17,10 +17,10 @@
         android:layout_height="47dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="319dp"
-        android:src="@drawable/BS" />
+        android:src="@drawable/logo" />
 
     <TextView
-        android:id="@+id/logo"
+        android:id="@+id/logoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
