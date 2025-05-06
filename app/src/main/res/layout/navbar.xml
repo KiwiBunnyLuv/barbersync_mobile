@@ -15,6 +15,7 @@
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/home"
         android:tint="#FFFFFF"
+
         android:scaleType="centerInside" />
 
     <ImageButton
