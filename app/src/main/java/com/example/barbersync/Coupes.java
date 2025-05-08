@@ -1,15 +1,17 @@
+package com.example.barbersync;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Coupes {
     private int id;
-    private String nom;
+    private String coupe;
     private List<CoupeCoiffeur> coiffeurs;
 
     // Constructeur complet
     public Coupes(int id, String nom) {
         this.id = id;
-        this.nom = nom;
+        this.coupe = coupe;
         this.coiffeurs = new ArrayList<>();
     }
     // Getters & Setters
@@ -20,10 +22,10 @@ public class Coupes {
         this.id = id;
     }
     public String getNom() {
-        return nom;
+        return coupe;
     }
     public void setNom(String nom) {
-        this.nom = nom;
+        this.coupe = nom;
     }
     public List<CoupeCoiffeur> getCoiffeurs() {
         return coiffeurs;
@@ -33,9 +35,9 @@ public class Coupes {
     }
     @Override
     public String toString() {
-        return "Coupes{" +
+        return "com.example.barbersync.Coupes{" +
                 "id=" + id +
-                ", nom='" + nom + '\'' +
+                ", nom='" + coupe + '\'' +
                 ", coiffeurs=" + coiffeurs +
                 '}';
 

@@ -1,12 +1,14 @@
+package com.example.barbersync;
+
 public class CoupeCoiffeur {
     private Coiffeur coiffeur;
     private Coupes coupe;
-    private double tarif;
+    private double prix;
 
-    public CoupeCoiffeur(Coiffeur coiffeur, Coupes coupe, double tarif) {
+    public CoupeCoiffeur(Coiffeur coiffeur, Coupes coupe, double prix) {
         this.coiffeur = coiffeur;
         this.coupe = coupe;
-        this.tarif = tarif;
+        this.prix = prix;
     }
     public Coiffeur getCoiffeur() {
         return coiffeur;
@@ -24,20 +26,20 @@ public class CoupeCoiffeur {
         this.coupe = coupe;
     }
 
-    public double getTarif() {
-        return tarif;
+    public double getPrix() {
+        return prix;
     }
 
-    public void setTarif(double tarif) {
-        this.tarif = tarif;
+    public void setPrix(double prix) {
+        this.prix = prix;
     }
 
     @Override
     public String toString() {
-        return "CoupeCoiffeur{" +
-                "coiffeur=" + coiffeur.getNom() +
+        return "com.example.barbersync.CoupeCoiffeur{" +
+                "coiffeur=" + coiffeur.getName() +
                 ", coupe=" + coupe.getNom() +
-                ", tarif=" + tarif +
+                ", tarif=" + prix +
                 '}';
     }
 }

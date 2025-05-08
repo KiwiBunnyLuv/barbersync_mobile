@@ -1,9 +1,11 @@
+package com.example.barbersync;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Coiffeur {
     private int id;
-    private String nom;
+    private String name;
     private String biographie;
     private List<CoupeCoiffeur> coupes;
     private List<CreneauCoiffeur> creneaux;
@@ -15,9 +17,9 @@ public class Coiffeur {
     }
 
     // Constructeur complet
-    public Coiffeur(int id, String nom, String biographie) {
+    public Coiffeur(int id, String name, String biographie) {
         this.id = id;
-        this.nom = nom;
+        this.name = name;
         this.biographie = biographie;
         this.coupes = new ArrayList<>();
         this.creneaux = new ArrayList<>();
@@ -32,12 +34,12 @@ public class Coiffeur {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBiographie() {
@@ -78,9 +80,9 @@ public class Coiffeur {
 
     @Override
     public String toString() {
-        return "Coiffeur{" +
+        return "com.example.barbersync.Coiffeur{" +
                 "id=" + id +
-                ", nom='" + nom + '\'' +
+                ", nom='" + name + '\'' +
                 ", biographie='" + biographie + '\'' +
                 '}';
     }

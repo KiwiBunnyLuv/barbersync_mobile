@@ -1,14 +1,16 @@
+package com.example.barbersync;
+
 public class Creneau {
     private int id;
-    private int heureDebut;
-    private int heureFin;
+    private int heure_debut;
+    private int heure_fin;
     private int date;
 
     // Constructeur
     public Creneau(int id, int heureDebut, int heureFin, int date) {
         this.id = id;
-        this.heureDebut = heureDebut;
-        this.heureFin = heureFin;
+        this.heure_debut = heureDebut;
+        this.heure_fin = heureFin;
         this.date = date;
     }
 
@@ -22,19 +24,19 @@ public class Creneau {
     }
 
     public int getHeureDebut() {
-        return heureDebut;
+        return heure_debut;
     }
 
     public void setHeureDebut(int heureDebut) {
-        this.heureDebut = heureDebut;
+        this.heure_debut = heureDebut;
     }
 
     public int getHeureFin() {
-        return heureFin;
+        return heure_fin;
     }
 
     public void setHeureFin(int heureFin) {
-        this.heureFin = heureFin;
+        this.heure_fin = heureFin;
     }
 
     public int getDate() {
@@ -48,6 +50,6 @@ public class Creneau {
     // Méthode pour afficher les détails du créneau
     @Override
     public String toString() {
-        return "Creneau [id=" + id + ", heureDebut=" + heureDebut + ", heureFin=" + heureFin + ", date=" + date + "]";
+        return "com.example.barbersync.Creneau [id=" + id + ", heureDebut=" + heure_debut + ", heureFin=" + heure_fin + ", date=" + date + "]";
     }
 }
