@@ -5,6 +5,117 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DashBoard">
+    tools:context=".DashBoard"
+    android:background="#000000">
 
+    <!-- Top bar -->
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/topbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Bottom bar -->
+    <include
+        android:id="@+id/bottom_bar"
+        layout="@layout/navbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Contenu principal entre les deux -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/welcomeMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bienvenue Samit."
+                android:textColor="#FFFFFF"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="besoin d'une coupe ?"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Nouveautés Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="nouveautés >"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/nouveautes_gradient"
+                android:textSize="20sp"
+                android:layout_marginBottom="0dp" />
+
+            <!-- Nouveautés Cards Container -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewNouveautes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/nouveautes_gradient" />
+
+            <!-- Nos Coiffeurs Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="nos coiffeurs >"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Barbers Grid -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="2">
+
+                <!-- Barber 1 -->
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile" />
+
+                <!-- Barber 2 -->
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile" />
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
