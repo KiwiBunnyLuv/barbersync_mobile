@@ -20,6 +20,7 @@ public class DashBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        // Pour afficher les nouveautes
         recyclerViewNouveautes = findViewById(R.id.recyclerViewNouveautes);
         recyclerViewNouveautes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -30,5 +31,24 @@ public class DashBoard extends AppCompatActivity {
 
         adapter = new NouveauteAdapter(this, nouveautes);
         recyclerViewNouveautes.setAdapter(adapter);
+
+        // Pour afficher les coiffeurs
+        RecyclerView recyclerViewCoiffeurs = findViewById(R.id.recyclerViewCoiffeurs);
+        recyclerViewCoiffeurs.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        List<Coiffeur> coiffeurs = new ArrayList<>();
+        coiffeurs.add(new Coiffeur(1, "Jean Dupont", "Expert en coupes modernes."));
+        coiffeurs.add(new Coiffeur(2, "Marie Curie", "Spécialiste des coiffures classiques."));
+
+        CoiffeurAdapter coiffeurAdapter = new CoiffeurAdapter(this, coiffeurs);
+        recyclerViewCoiffeurs.setAdapter(coiffeurAdapter);
+
+
+
+        // Initialisation des boutons de navigation
+        findViewById(R.id.nav_profile).setOnClickListener(v -> {
+            Intent intent = new Intent(DashBoard.this, SettingsActivity.class);
+            startActivity(intent);
+        });
     }
 }

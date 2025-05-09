@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#000000">
+
+    <!-- Top bar -->
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/topbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"/>
+
+
+
+    <!-- Profile Icon and Name -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="40dp">
+
+        <ImageView
+            android:layout_width="138dp"
+            android:layout_height="102dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#000000"
+            android:src="@drawable/moustache" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ramin Amiri"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Menu Options -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modifier le profil"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#222222"
+            android:layout_marginBottom="8dp"
+            android:padding="16dp"
+            android:gravity="start|center_vertical"
+            android:drawableEnd="@drawable/arrow_right"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vos rendez-vous"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#222222"
+            android:layout_marginBottom="8dp"
+            android:padding="16dp"
+            android:gravity="start|center_vertical"
+            android:drawableEnd="@drawable/arrow_right"
+            android:textAllCaps="false"/>
+
+        <!-- Logout Button -->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Se déconnecter"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#222222"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:gravity="center"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+
+    <!-- Bottom bar -->
+
+    <include
+        android:id="@+id/bottom_bar"
+        layout="@layout/navbar"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="30dp"/>
+
+
+
+</LinearLayout>

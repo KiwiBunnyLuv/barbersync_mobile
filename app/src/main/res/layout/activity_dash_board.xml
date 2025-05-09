@@ -17,17 +17,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="30dp"/>
 
     <!-- Bottom bar -->
     <include
         android:id="@+id/bottom_bar"
         layout="@layout/navbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="30dp"/>
 
     <!-- Contenu principal entre les deux -->
     <ScrollView
@@ -91,31 +92,14 @@
                 android:textSize="20sp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Barbers Grid -->
-            <GridLayout
+            <!-- Nouveautés Cards Container -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCoiffeurs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:rowCount="2">
-
-                <!-- Barber 1 -->
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile" />
-
-                <!-- Barber 2 -->
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile" />
-            </GridLayout>
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="24dp"
+                android:background="@color/black" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
