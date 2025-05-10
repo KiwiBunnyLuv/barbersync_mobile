@@ -23,10 +23,6 @@ public class SyncManager {
                 Log.e("SYNC", "Échec de la récupération des coiffeurs");
             }
 
-            // Tu pourras répéter ici pour les coupes, créneaux, etc.
-        }).start();
-
-        new Thread(() -> {
             List<Coupes> Coupes = api.getCoupes();
             if (Coupes != null) {
                 for (Coupes c : Coupes) {
@@ -37,10 +33,6 @@ public class SyncManager {
                 Log.e("SYNC", "Échec de la récupération des coiffeurs");
             }
 
-            // Tu pourras répéter ici pour les coupes, créneaux, etc.
-        }).start();
-
-        new Thread(() -> {
             List<Creneau> Creneaux = api.getCreneau();
             if (Creneaux != null) {
                 for (Creneau c : Creneaux) {
@@ -50,11 +42,6 @@ public class SyncManager {
             } else {
                 Log.e("SYNC", "Échec de la récupération des coiffeurs");
             }
-
-            // Tu pourras répéter ici pour les coupes, créneaux, etc.
-        }).start();
-
-        new Thread(() -> {
             List<CoupeCoiffeur> coupesCoiffeurs = api.getCoupeCoiffeurs();
             if (coupesCoiffeurs != null) {
                 for (CoupeCoiffeur c : coupesCoiffeurs) {
@@ -64,10 +51,6 @@ public class SyncManager {
             } else {
                 Log.e("SYNC", "Échec de la récupération des coiffeurs");
             }
-
-            // Tu pourras répéter ici pour les coupes, créneaux, etc.
-        }).start();
-        new Thread(() -> {
             List<CreneauCoiffeur> CreneauCoiffeurs = api.getCreneauCoiffeur();
             if (CreneauCoiffeurs != null) {
                 for (CreneauCoiffeur c : CreneauCoiffeurs) {
@@ -77,6 +60,36 @@ public class SyncManager {
             } else {
                 Log.e("SYNC", "Échec de la récupération des coiffeurs");
             }
+            List<Photo> photo = api.getPhoto();
+            if (photo != null) {
+                for (Photo c : photo) {
+                    db.insertPhoto(c);
+                }
+                Log.d("SYNC", "Coiffeurs synchronisés : " + photo.size());
+            } else {
+                Log.e("SYNC", "Échec de la récupération des coiffeurs");
+            }
+        }).start();
+
+        new Thread(() -> {
+
+
+            // Tu pourras répéter ici pour les coupes, créneaux, etc.
+        }).start();
+
+        new Thread(() -> {
+
+
+            // Tu pourras répéter ici pour les coupes, créneaux, etc.
+        }).start();
+
+        new Thread(() -> {
+
+
+            // Tu pourras répéter ici pour les coupes, créneaux, etc.
+        }).start();
+        new Thread(() -> {
+
 
             // Tu pourras répéter ici pour les coupes, créneaux, etc.
         }).start();

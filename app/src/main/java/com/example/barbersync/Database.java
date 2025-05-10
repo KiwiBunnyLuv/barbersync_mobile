@@ -58,6 +58,13 @@ public class Database extends SQLiteOpenHelper {
                 "PRIMARY KEY(coiffeur_id, creneau_id), " +
                 "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id), " +
                 "FOREIGN KEY(creneau_id) REFERENCES creneaux(id))");
+
+        db.execSQL("CREATE TABLE photos (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "coiffeur_id INTEGER, " +
+                "nomFichierImage TEXT, " +
+                "description TEXT, " +
+                "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id))");
     }
 
     @Override
@@ -105,6 +112,16 @@ public class Database extends SQLiteOpenHelper {
         values.put("coupe_id", c.getCoupe());
         values.put("prix", c.getPrix());
         db.insertWithOnConflict("coiffeur_coupe", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public boolean insertPhoto(Photo c) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", c.getId());
+        values.put("nomFichierImage", c.getNomFichierImage());
+        values.put("description", c.getDescription());
+        long result = db.insert("photos", null, values);
+        return result != -1;
     }
 
     public void insertCoiffeurCreneau(CreneauCoiffeur c) {

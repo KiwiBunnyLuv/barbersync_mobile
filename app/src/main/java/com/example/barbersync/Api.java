@@ -5,14 +5,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Request;
@@ -145,5 +139,31 @@ public class Api {
         }
 
         return CoupeCoiffeur;
+    }
+
+    public List<Photo> getPhoto(){
+        List<Photo> photo = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("http://192.168.11.212:5000/photos")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String json = response.body().string();
+
+                // Désérialisation avec Gson
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Photo>>(){}.getType();
+                photo = gson.fromJson(json, type);
+            } else {
+                Log.e("API", "Erreur HTTP : " + response.code());
+            }
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau : " + e.getMessage());
+        }
+
+        return photo;
     }
 }
