@@ -34,12 +34,4 @@ public class CoupeCoiffeur {
         this.prix = prix;
     }
 
-    @Override
-    public String toString() {
-        return "com.example.barbersync.CoupeCoiffeur{" +
-                "coiffeur=" + coiffeur.getName() +
-                ", coupe=" + coupe.getNom() +
-                ", tarif=" + prix +
-                '}';
-    }
 }

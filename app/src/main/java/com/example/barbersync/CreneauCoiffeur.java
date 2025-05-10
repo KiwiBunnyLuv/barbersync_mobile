@@ -3,10 +3,10 @@ package com.example.barbersync;
 public class CreneauCoiffeur {
     private int coiffeur;
     private int creneau;
-    private Boolean dispo;
-    private Boolean reserve;
+    private int dispo;
+    private int reserve;
 
-    public CreneauCoiffeur(int coiffeur, int creneau, Boolean dispo, Boolean reserve ) {
+    public CreneauCoiffeur(int coiffeur, int creneau, int dispo, int reserve ) {
         this.coiffeur = coiffeur;
         this.creneau = creneau;
         this.dispo = dispo;
@@ -29,25 +29,18 @@ public class CreneauCoiffeur {
         this.creneau = creneau;
     }
 
-    public Boolean getDispo() {
+    public int getDispo() {
         return dispo;
     }
-    public void setDispo(Boolean estDispo) {
+    public void setDispo(int estDispo) {
         this.dispo = estDispo;
     }
-    public Boolean getReserve() {
+    public int getReserve() {
         return reserve;
     }
-    public void setReserve(Boolean estReserve) {
+    public void setReserve(int estReserve) {
         this.reserve = estReserve;
     }
 
-    @Override
-    public String toString() {
-        return "com.example.barbersync.CreneauCoiffeur{" +
-                "coiffeur=" + coiffeur.getName() +
-                ", creneau=" + creneau.getDate() +
-                '}';
-    }
 
 }

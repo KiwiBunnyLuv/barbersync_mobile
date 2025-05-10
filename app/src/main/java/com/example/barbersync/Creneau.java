@@ -1,13 +1,15 @@
 package com.example.barbersync;
 
+import java.time.LocalDate;
+
 public class Creneau {
     private int id;
-    private int heure_debut;
-    private int heure_fin;
-    private int date;
+    private String heure_debut;
+    private String heure_fin;
+    private String date;
 
     // Constructeur
-    public Creneau(int id, int heureDebut, int heureFin, int date) {
+    public Creneau(int id, String heureDebut, String heureFin, String date) {
         this.id = id;
         this.heure_debut = heureDebut;
         this.heure_fin = heureFin;
@@ -23,27 +25,27 @@ public class Creneau {
         this.id = id;
     }
 
-    public int getHeureDebut() {
+    public String getHeureDebut() {
         return heure_debut;
     }
 
-    public void setHeureDebut(int heureDebut) {
+    public void setHeureDebut(String heureDebut) {
         this.heure_debut = heureDebut;
     }
 
-    public int getHeureFin() {
+    public String getHeureFin() {
         return heure_fin;
     }
 
-    public void setHeureFin(int heureFin) {
+    public void setHeureFin(String heureFin) {
         this.heure_fin = heureFin;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

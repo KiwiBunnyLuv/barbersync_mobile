@@ -68,7 +68,7 @@ public class Coiffeur {
 
     // Ajouter une coupe avec tarif
     public void addCoupe(Coupes coupe, double tarif) {
-        CoupeCoiffeur relation = new CoupeCoiffeur(this, coupe, tarif);
+        CoupeCoiffeur relation = new CoupeCoiffeur(id, coupe.getId(), tarif);
         this.coupes.add(relation);
         coupe.getCoiffeurs().add(relation);
     }

@@ -51,7 +51,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coiffeurs")
+                .url("http://192.168.11.212:5000/coupes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -76,7 +76,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coiffeurs")
+                .url("http://192.168.11.212:5000/creneau")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -101,7 +101,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coiffeurs")
+                .url("http://192.168.11.212:5000/creneauCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -126,7 +126,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coiffeurs")
+                .url("http://192.168.11.212:5000/coupeCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -135,7 +135,7 @@ public class Api {
 
                 // Désérialisation avec Gson
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<Coiffeur>>(){}.getType();
+                Type type = new TypeToken<List<CoupeCoiffeur>>(){}.getType();
                 CoupeCoiffeur = gson.fromJson(json, type);
             } else {
                 Log.e("API", "Erreur HTTP : " + response.code());

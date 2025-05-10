@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView textResult;
+    SyncManager synchroWeb= new SyncManager();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
+
+        synchroWeb.synchroniserDepuisApi(this);
 
 
         // Appeler l'API Flask

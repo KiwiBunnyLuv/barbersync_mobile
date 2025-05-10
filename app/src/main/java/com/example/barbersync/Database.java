@@ -75,7 +75,7 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("id", c.getId());
-        values.put("nom", c.getName());
+        values.put("name", c.getName());
         values.put("biographie", c.getBiographie());
         db.insertWithOnConflict("coiffeurs", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
@@ -112,8 +112,8 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("coiffeur_id", c.getCoiffeurs());
         values.put("creneau_id", c.getCreneau());
-        values.put("dispo", c.getDispo()? 1 : 0);
-        values.put("reserve", c.getReserve() ? 1 : 0);
+        values.put("dispo", c.getDispo());
+        values.put("reserve", c.getReserve());
         db.insertWithOnConflict("coiffeur_creneau", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
