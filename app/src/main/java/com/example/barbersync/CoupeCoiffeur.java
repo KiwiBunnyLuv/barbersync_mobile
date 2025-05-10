@@ -1,28 +1,28 @@
 package com.example.barbersync;
 
 public class CoupeCoiffeur {
-    private Coiffeur coiffeur;
-    private Coupes coupe;
+    private int coiffeur;
+    private int coupe;
     private double prix;
 
-    public CoupeCoiffeur(Coiffeur coiffeur, Coupes coupe, double prix) {
+    public CoupeCoiffeur(int coiffeur, int coupe, double prix) {
         this.coiffeur = coiffeur;
         this.coupe = coupe;
         this.prix = prix;
     }
-    public Coiffeur getCoiffeur() {
+    public int getCoiffeur() {
         return coiffeur;
     }
 
-    public void setCoiffeur(Coiffeur coiffeur) {
+    public void setCoiffeur(int coiffeur) {
         this.coiffeur = coiffeur;
     }
 
-    public Coupes getCoupe() {
+    public int getCoupe() {
         return coupe;
     }
 
-    public void setCoupe(Coupes coupe) {
+    public void setCoupe(int coupe) {
         this.coupe = coupe;
     }
 

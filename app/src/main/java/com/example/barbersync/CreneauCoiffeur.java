@@ -1,31 +1,31 @@
 package com.example.barbersync;
 
 public class CreneauCoiffeur {
-    private Coiffeur coiffeur;
-    private Creneau creneau;
+    private int coiffeur;
+    private int creneau;
     private Boolean dispo;
     private Boolean reserve;
 
-    public CreneauCoiffeur(Coiffeur coiffeur, Creneau creneau, Boolean dispo, Boolean reserve ) {
+    public CreneauCoiffeur(int coiffeur, int creneau, Boolean dispo, Boolean reserve ) {
         this.coiffeur = coiffeur;
         this.creneau = creneau;
         this.dispo = dispo;
         this.reserve = reserve;
     }
 
-    public Coiffeur getCoiffeurs() {
+    public int getCoiffeurs() {
         return coiffeur;
     }
 
-    public void setCoiffeur(Coiffeur coiffeur) {
+    public void setCoiffeur(int coiffeur) {
         this.coiffeur = coiffeur;
     }
 
-    public Creneau getCreneau() {
+    public int getCreneau() {
         return creneau;
     }
 
-    public void setCreneau(Creneau creneau) {
+    public void setCreneau(int creneau) {
         this.creneau = creneau;
     }
 

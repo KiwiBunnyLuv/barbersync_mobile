@@ -1,6 +1,8 @@
 package com.example.barbersync;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.widget.TextView;
 
@@ -11,6 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONObject;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,16 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
         textResult = findViewById(R.id.textResult);
 
-        // Autoriser les requêtes réseau sur le thread principal (à éviter en production)
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
 
         // Appeler l'API Flask
-        String result = Api.get("http://10.0.2.2:5000/nouveautes"); //ou api de ton ordi
+ //ou api de ton ordi
 
-        if (result != null) {
-            textResult.setText(result);
-        } else {
-            textResult.setText("Erreur de connexion à l’API.");
-        }
+
     }
 }
