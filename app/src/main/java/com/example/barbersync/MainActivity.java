@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // ensure this is correct layout file
+        setContentView(R.layout.activity_main);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(v -> attemptLogin(v));
+        TextView tvRegister = findViewById(R.id.tvRegister);
+        tvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+            startActivity(intent);
+        });
     }
 
     public void attemptLogin(View view) {

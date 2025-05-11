@@ -215,9 +215,33 @@ public class Api {
         client2.setCity("Toronto");
         client2.setProvince("Ontario");
         client2.setPostal_code("M1M 1M1");
-        client2.setPhone("test123"); //mot de passe pour l'instant, probleme avec hash
+        client2.setPhone("test123"); //phone est le mot de passe pour l'instant, probleme avec hash
         clients.add(client2);
 
         return clients;
     }
+    public boolean setClient(Client client) {
+        OkHttpClient httpClient = new OkHttpClient();
+        Gson gson = new Gson();
+        String jsonBody = gson.toJson(client);
+
+        Request request = new Request.Builder()
+                .url("http://192.168.11.212:5000/client") // Update if your endpoint is different
+                .post(okhttp3.RequestBody.create(jsonBody, okhttp3.MediaType.parse("application/json")))
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                Log.d("API", "Client ajouté avec succès");
+                return true;
+            } else {
+                Log.e("API", "Erreur HTTP lors de l'ajout du client : " + response.code());
+            }
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau lors de l'ajout du client : " + e.getMessage());
+        }
+
+        return false;
+    }
+
 }
