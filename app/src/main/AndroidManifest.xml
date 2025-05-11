@@ -24,7 +24,9 @@
         <activity
             android:name=".coiffeurs"
             android:exported="false" />
-
+        <activity
+            android:name=".DashBoard"
+            android:label="Dashboard"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

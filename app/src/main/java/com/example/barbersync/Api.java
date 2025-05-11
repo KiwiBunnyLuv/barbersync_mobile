@@ -166,4 +166,58 @@ public class Api {
 
         return photo;
     }
+    /*public List<Client> getClients(){
+        List<Client> clients = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("http://192.168.11.212:5000/client")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String json = response.body().string();
+
+                // Désérialisation avec Gson
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Client>>(){}.getType();
+                clients = gson.fromJson(json, type);
+            } else {
+                Log.e("API", "Erreur HTTP : " + response.code());
+            }
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau : " + e.getMessage());
+        }
+
+        return clients;
+    }*/
+    //hard coded
+    public List<Client> getClients() {
+        List<Client> clients = new ArrayList<>();
+
+        // Create and add first test client
+        Client client1 = new Client();
+        client1.setId(1);
+        client1.setName("John Doe");
+        client1.setEmail("john@example.com");
+        client1.setAddress("123 Main St");
+        client1.setCity("Montreal");
+        client1.setProvince("Quebec");
+        client1.setPostal_code("H1H 1H1");
+        client1.setPhone("password123"); //test
+        clients.add(client1);  // <-- THIS WAS MISSING
+
+        Client client2 = new Client();
+        client2.setId(2);
+        client2.setName("Jane Smith");
+        client2.setEmail("jane@example.com");
+        client2.setAddress("456 Oak Ave");
+        client2.setCity("Toronto");
+        client2.setProvince("Ontario");
+        client2.setPostal_code("M1M 1M1");
+        client2.setPhone("test123");
+        clients.add(client2);  // <-- THIS WAS MISSING
+
+        return clients;
+    }
 }
