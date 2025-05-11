@@ -1,8 +1,9 @@
 package com.example.barbersync;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Creneau {
+public class Creneau implements Serializable {
     private int id;
     private String heure_debut;
     private String heure_fin;

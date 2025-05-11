@@ -13,6 +13,11 @@ import okhttp3.Request;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 public class Api {
 
     public List<Coiffeur> getCoiffeurs(){
@@ -20,7 +25,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coiffeurs")
+                .url("http://localhost:5000/coiffeurs")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -45,7 +50,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coupes")
+                .url("http://localhost:5000/coupes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -70,7 +75,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/creneau")
+                .url("http://localhost:5000/creneau")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -95,7 +100,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/creneauCoiffeur")
+                .url("http://localhost:5000/creneauCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -120,7 +125,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/coupeCoiffeur")
+                .url("http://localhost:5000/coupeCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -146,7 +151,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/photos")
+                .url("http://localhost:5000/photos")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -226,7 +231,7 @@ public class Api {
         String jsonBody = gson.toJson(client);
 
         Request request = new Request.Builder()
-                .url("http://192.168.11.212:5000/client") // Update if your endpoint is different
+                .url("http://localhost:5000/client") // Update if your endpoint is different
                 .post(okhttp3.RequestBody.create(jsonBody, okhttp3.MediaType.parse("application/json")))
                 .build();
 
@@ -242,6 +247,124 @@ public class Api {
         }
 
         return false;
+    }
+
+
+    public List<RendezVous> getRendezVous() {
+        List<RendezVous> rendezVousList = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+
+        int clientId = Client.CLIENT_COURANT.getId();
+
+        Request request = new Request.Builder()
+                .url("http://localhost:5000/rendezvous")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String json = response.body().string();
+
+                // Désérialisation avec Gson
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<RendezVous>>(){}.getType();
+                rendezVousList = gson.fromJson(json, type);
+
+                // Filtrer pour n'obtenir que les rendez-vous du client connecté
+                List<RendezVous> filteredList = new ArrayList<>();
+                for (RendezVous rdv : rendezVousList) {
+                    if (rdv.getId_user() == clientId) {
+                        filteredList.add(rdv);
+                    }
+                }
+
+                return filteredList;
+            } else {
+                Log.e("API", "Erreur HTTP : " + response.code());
+            }
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau : " + e.getMessage());
+        }
+
+        return rendezVousList;
+    }
+
+    public boolean creerRendezVous(int idCreneau, int idClient, String typeService, double prix, int idCoiffeur) {
+        OkHttpClient client = new OkHttpClient();
+
+        // Créer l'objet JSON pour la requête
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id_creneau", idCreneau);
+            jsonObject.put("id_user", idClient);
+            jsonObject.put("confirmation_envoye", false);
+            jsonObject.put("rappel_envoye", false);
+            jsonObject.put("etatRendezVous", false);
+            // On n'a pas besoin d'envoyer typeService et prix, car ils sont gérés côté serveur
+        } catch (JSONException e) {
+            Log.e("API", "Erreur JSON : " + e.getMessage());
+            return false;
+        }
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
+
+        Request request = new Request.Builder()
+                .url("http://localhost:5000/rendezvous")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau : " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean annulerRendezVous(int idRendezVous) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("http://localhost:5000/rendezvous/" + idRendezVous)
+                .delete()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau : " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean ajouterAvis(int idRendezVous, String titre, String commentaire, int note) {
+        OkHttpClient client = new OkHttpClient();
+
+        // Créer l'objet JSON pour la requête
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id_rendezvous", idRendezVous);
+            jsonObject.put("titre", titre);
+            jsonObject.put("commentaire", commentaire);
+            jsonObject.put("note_sur_5", note);
+            jsonObject.put("chemin_photo", ""); // On n'utilise pas de photo pour simplifier
+        } catch (JSONException e) {
+            Log.e("API", "Erreur JSON : " + e.getMessage());
+            return false;
+        }
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
+
+        Request request = new Request.Builder()
+                .url("http://localhost:5000/avis")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            Log.e("API", "Erreur réseau : " + e.getMessage());
+            return false;
+        }
     }
 
 }

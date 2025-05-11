@@ -2,6 +2,7 @@ package com.example.barbersync;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         findViewById(R.id.nav_home).setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, DashBoard.class);
+            startActivity(intent);
+        });
+
+        Button rendezVousButton = findViewById(R.id.btnRendezVous);
+        rendezVousButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, HistoriqueRendezVousActivity.class);
             startActivity(intent);
         });
     }

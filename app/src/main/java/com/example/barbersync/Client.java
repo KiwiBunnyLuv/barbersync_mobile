@@ -1,7 +1,5 @@
 package com.example.barbersync;
 import android.os.Parcel;
-import android.os.Parcelable;
-import java.io.Serializable;
 public class Client{
     private int id;
     private String name;
@@ -92,6 +90,8 @@ public class Client{
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public static Client CLIENT_COURANT = null;
 
     @Override
     public String toString() {

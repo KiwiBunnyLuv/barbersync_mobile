@@ -64,6 +64,7 @@
             android:textAllCaps="false"/>
 
         <Button
+            android:id="@+id/btnRendezVous"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Vos rendez-vous"

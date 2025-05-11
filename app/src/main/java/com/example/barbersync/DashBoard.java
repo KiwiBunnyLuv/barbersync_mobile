@@ -50,5 +50,10 @@ public class DashBoard extends AppCompatActivity {
             Intent intent = new Intent(DashBoard.this, SettingsActivity.class);
             startActivity(intent);
         });
+
+        findViewById(R.id.nav_scissors).setOnClickListener(v -> {
+            Intent intent = new Intent(DashBoard.this, ListeCoiffeursActivity.class);
+            startActivity(intent);
+        });
     }
 }
