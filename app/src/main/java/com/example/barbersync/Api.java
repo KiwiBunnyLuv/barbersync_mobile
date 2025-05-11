@@ -204,8 +204,8 @@ public class Api {
         client1.setCity("Montreal");
         client1.setProvince("Quebec");
         client1.setPostal_code("H1H 1H1");
-        client1.setPhone("password123"); //test
-        clients.add(client1);  // <-- THIS WAS MISSING
+        client1.setPhone("password123"); //mot de passe pour l'instant, probleme avec hash
+        clients.add(client1);
 
         Client client2 = new Client();
         client2.setId(2);
@@ -215,8 +215,8 @@ public class Api {
         client2.setCity("Toronto");
         client2.setProvince("Ontario");
         client2.setPostal_code("M1M 1M1");
-        client2.setPhone("test123");
-        clients.add(client2);  // <-- THIS WAS MISSING
+        client2.setPhone("test123"); //mot de passe pour l'instant, probleme avec hash
+        clients.add(client2);
 
         return clients;
     }
