@@ -2,8 +2,12 @@ package com.example.barbersync;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import java.util.ArrayList;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
     private static final String DB_NAME = "barbersync.db";
@@ -26,12 +30,6 @@ public class Database extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY, " +
                 "coupe TEXT)");
 
-        // Table photos
-        db.execSQL("CREATE TABLE photos (" +
-                "id INTEGER PRIMARY KEY, " +
-                "url TEXT, " +
-                "coiffeur_id INTEGER, " +
-                "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id))");
 
         // Table creneaux
         db.execSQL("CREATE TABLE creneaux (" +
@@ -69,7 +67,6 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Pour recréer les tables en cas de mise à jour
         db.execSQL("DROP TABLE IF EXISTS coiffeur_creneau");
         db.execSQL("DROP TABLE IF EXISTS coiffeur_coupe");
         db.execSQL("DROP TABLE IF EXISTS photos");
@@ -117,7 +114,8 @@ public class Database extends SQLiteOpenHelper {
     public boolean insertPhoto(Photo c) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("user_id", c.getId());
+
+        values.put("coiffeur_id", c.getUser_id());
         values.put("nomFichierImage", c.getNomFichierImage());
         values.put("description", c.getDescription());
         long result = db.insert("photos", null, values);
@@ -132,6 +130,30 @@ public class Database extends SQLiteOpenHelper {
         values.put("dispo", c.getDispo());
         values.put("reserve", c.getReserve());
         db.insertWithOnConflict("coiffeur_creneau", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    /**
+     * recupere toutes les coiffeurs de la database avec cursor
+     * @return toutes les coiffeurs de la db dans une list
+     */
+    public List<Coiffeur> getAllCoiffeurs() {
+        List<Coiffeur> liste = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM coiffeurs", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                String nom = cursor.getString(cursor.getColumnIndexOrThrow("nom"));
+                String biographie = cursor.getString(cursor.getColumnIndexOrThrow("biographie"));
+
+                Coiffeur c = new Coiffeur(id, nom, biographie);
+                liste.add(c);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return liste;
     }
 
 }

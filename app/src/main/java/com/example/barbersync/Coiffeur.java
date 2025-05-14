@@ -18,7 +18,7 @@ public class Coiffeur implements Serializable {
     }
 
     // Constructeur complet
-    public Coiffeur(int id, String name, String biographie) {
+    public Coiffeur(int id , String name, String biographie) {
         this.id = id;
         this.name = name;
         this.biographie = biographie;
