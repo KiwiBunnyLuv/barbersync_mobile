@@ -6,6 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.List;
 
@@ -24,6 +25,15 @@ public class Database extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY, " +
                 "name TEXT, " +
                 "biographie TEXT)");
+        // Table nouveautes
+        db.execSQL("CREATE TABLE nouveautes (" +
+                "id INTEGER PRIMARY KEY, " +
+                "nom TEXT, " +
+                "description TEXT, " +
+                "date_debut TEXT, " +
+                "date_fin TEXT, " +
+                "is_active BOOLEAN, " +
+                "type TEXT)");
 
         // Table coupes
         db.execSQL("CREATE TABLE coupes (" +
@@ -57,12 +67,12 @@ public class Database extends SQLiteOpenHelper {
                 "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id), " +
                 "FOREIGN KEY(creneau_id) REFERENCES creneaux(id))");
 
-        db.execSQL("CREATE TABLE photos (" +
+        /*db.execSQL("CREATE TABLE photos (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "coiffeur_id INTEGER, " +
                 "nomFichierImage TEXT, " +
                 "description TEXT, " +
-                "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id))");
+                "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id))");*/
     }
 
     @Override
@@ -82,6 +92,18 @@ public class Database extends SQLiteOpenHelper {
         values.put("name", c.getName());
         values.put("biographie", c.getBiographie());
         db.insertWithOnConflict("coiffeurs", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+    public void insertNouveaute(Nouveaute n) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", n.getId());
+        values.put("nom", n.getNom());
+        values.put("description", n.getDescription());
+        values.put("date_debut", n.getDateDebut().toString());
+        values.put("date_fin", n.getDateFin().toString());
+        values.put("is_active", n.getIsActive());
+        values.put("type", n.getType());
+        db.insertWithOnConflict("nouveautes", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public void insertCoupe(Coupes c) {
@@ -137,23 +159,45 @@ public class Database extends SQLiteOpenHelper {
      * @return toutes les coiffeurs de la db dans une list
      */
     public List<Coiffeur> getAllCoiffeurs() {
-        List<Coiffeur> liste = new ArrayList<>();
+        List<Coiffeur> coiffeurs = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM coiffeurs", null);
 
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
-                String nom = cursor.getString(cursor.getColumnIndexOrThrow("nom"));
-                String biographie = cursor.getString(cursor.getColumnIndexOrThrow("biographie"));
-
-                Coiffeur c = new Coiffeur(id, nom, biographie);
-                liste.add(c);
+                Coiffeur coiffeur = new Coiffeur(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("biographie"))
+                );
+                coiffeurs.add(coiffeur);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
-        return liste;
+        return coiffeurs;
     }
+    public List<Nouveaute> getAllNouveautes() {
+        List<Nouveaute> nouveautes = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM nouveautes", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Nouveaute nouveaute = new Nouveaute(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("nom")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("date_debut")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("date_fin")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("is_active")) == 1,
+                        cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                );
+                nouveautes.add(nouveaute);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return nouveautes;
+    }
+
 
 }

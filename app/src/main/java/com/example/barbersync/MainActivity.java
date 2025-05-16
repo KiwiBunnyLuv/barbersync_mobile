@@ -1,5 +1,6 @@
 package com.example.barbersync;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +17,15 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private TextView textResult;
-    private Api api = new Api(); // You already defined the API class
+    private final SyncManager sync = new SyncManager();
+    private final Api api = new Api(); // You already defined the API class
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sync.synchroniserDepuisApi(this);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);

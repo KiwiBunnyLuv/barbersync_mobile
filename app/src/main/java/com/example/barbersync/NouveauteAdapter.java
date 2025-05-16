@@ -32,14 +32,14 @@ public class NouveauteAdapter extends RecyclerView.Adapter<NouveauteAdapter.Nouv
     @Override
     public void onBindViewHolder(@NonNull NouveauteViewHolder holder, int position) {
         Nouveaute nouveaute = nouveautes.get(position);
-        holder.titre.setText(nouveaute.getTitre());
+        holder.titre.setText(nouveaute.getNom());
         holder.description.setText(nouveaute.getDescription());
 
         holder.btnEnSavoirPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             Intent intent = new Intent(context, NouveauteDetailActivity.class);
-            intent.putExtra("titre", nouveaute.getTitre());
+            intent.putExtra("titre", nouveaute.getNom());
             intent.putExtra("description", nouveaute.getDescription());
             intent.putExtra("dateDebut", nouveaute.getDateDebut().toString());
             intent.putExtra("dateFin", nouveaute.getDateFin().toString());

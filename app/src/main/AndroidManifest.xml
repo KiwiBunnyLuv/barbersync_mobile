@@ -45,16 +45,18 @@
             android:exported="false" />
         <activity
             android:name=".DashBoard"
-            android:label="Dashboard" />
+            android:exported="true"
+            android:label="Dashboard" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".SignUpActivity" />
         <activity
             android:name=".splash"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

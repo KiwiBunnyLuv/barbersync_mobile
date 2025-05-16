@@ -29,8 +29,16 @@ public class CoiffeurAdapter extends RecyclerView.Adapter<CoiffeurAdapter.Coiffe
     @Override
     public void onBindViewHolder(@NonNull CoiffeurViewHolder holder, int position) {
         Coiffeur coiffeur = coiffeurs.get(position);
+
+        // Afficher le nom
         holder.name.setText(coiffeur.getName());
-        holder.biographie.setText(coiffeur.getBiographie());
+
+        // Tronquer la biographie si elle est trop longue
+        String biographie = coiffeur.getBiographie();
+        if (biographie != null && biographie.length() > 30) {
+            biographie = biographie.substring(0, 30) + "...";
+        }
+        holder.biographie.setText(biographie);
     }
 
     @Override
