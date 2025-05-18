@@ -10,7 +10,7 @@ public class Coupes implements Serializable {
     private List<CoupeCoiffeur> coiffeurs;
 
     // Constructeur complet
-    public Coupes(int id, String nom) {
+    public Coupes(int id, String coupe) {
         this.id = id;
         this.coupe = coupe;
         this.coiffeurs = new ArrayList<>();
@@ -23,7 +23,7 @@ public class Coupes implements Serializable {
         this.id = id;
     }
     public String getNom() {
-        return coupe;
+        return this.coupe;
     }
     public void setNom(String nom) {
         this.coupe = nom;

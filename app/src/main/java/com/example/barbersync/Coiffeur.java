@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Coiffeur implements Serializable {
     private int id;
-    private String name;
+    private String nom;
     private String biographie;
     private List<CoupeCoiffeur> coupes;
     private List<CreneauCoiffeur> creneaux;
@@ -22,7 +22,7 @@ public class Coiffeur implements Serializable {
     // Constructeur complet
     public Coiffeur(int id , String name, String biographie) {
         this.id = id;
-        this.name = name;
+        this.nom = name;
         this.biographie = biographie;
         this.coupes = new ArrayList<>();
         this.creneaux = new ArrayList<>();
@@ -39,15 +39,15 @@ public class Coiffeur implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return this.nom;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.nom = name;
     }
 
     public String getBiographie() {
-        return biographie;
+        return this.biographie;
     }
 
     public void setBiographie(String biographie) {
@@ -92,7 +92,7 @@ public class Coiffeur implements Serializable {
     public String toString() {
         return "com.example.barbersync.Coiffeur{" +
                 "id=" + id +
-                ", nom='" + name + '\'' +
+                ", nom='" + nom + '\'' +
                 ", biographie='" + biographie + '\'' +
                 '}';
     }

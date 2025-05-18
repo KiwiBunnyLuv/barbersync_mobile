@@ -26,6 +26,7 @@ public class SyncManager {
                 List<Coiffeur> coiffeurs = api.getCoiffeurs();
                 if (coiffeurs != null) {
                     for (Coiffeur c : coiffeurs) {
+                        Log.e("Sync", "MET CHAQUE COIFFEUR DANS LA BD : " + c.getName());
                         db.insertCoiffeur(c);
                     }
                     Log.d("SYNC", "Coiffeurs synchronisés : " + coiffeurs.size());

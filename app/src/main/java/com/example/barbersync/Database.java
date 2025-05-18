@@ -21,19 +21,19 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Table coiffeurs
         db.execSQL("CREATE TABLE coiffeurs (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, " +
                 "biographie TEXT)");
 
         // Table coupes
         db.execSQL("CREATE TABLE coupes (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "coupe TEXT)");
 
 
         // Table creneaux
         db.execSQL("CREATE TABLE creneaux (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "date TEXT, " +
                 "heure_debut TEXT," +
                 "heure_fin TEXT)");
@@ -59,7 +59,7 @@ public class Database extends SQLiteOpenHelper {
 
         // Table nouveautes
         db.execSQL("CREATE TABLE nouveautes (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nom TEXT, " +
                 "description TEXT, " +
                 "date_debut TEXT, " +
@@ -67,6 +67,7 @@ public class Database extends SQLiteOpenHelper {
                 "is_active BOOLEAN, " +
                 "type TEXT)");
 
+        // Table photos
         db.execSQL("CREATE TABLE photos (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "coiffeur_id INTEGER, " +
@@ -123,15 +124,14 @@ public class Database extends SQLiteOpenHelper {
         db.insertWithOnConflict("coiffeur_coupe", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public boolean insertPhoto(Photo c) {
+    public void insertPhoto(Photo p) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("coiffeur_id", c.getUser_id());
-        values.put("nomFichierImage", c.getNomFichierImage());
-        values.put("description", c.getDescription());
-        long result = db.insert("photos", null, values);
-        return result != -1;
+        values.put("coiffeur_id", p.getUser_id());
+        values.put("nomFichierImage", p.getNomFichierImage());
+        values.put("description", p.getDescription());
+        db.insertWithOnConflict("photos", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public void insertCoiffeurCreneau(CreneauCoiffeur c) {

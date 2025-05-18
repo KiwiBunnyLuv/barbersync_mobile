@@ -23,16 +23,13 @@ public class Api {
     public List<Coiffeur> getCoiffeurs(){
         List<Coiffeur> coiffeurs = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
-        Log.e("API", "getCoiffeurs called");
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/coiffeurs")
+                .url("http://192.168.1.216:5000/coiffeurs")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            Log.e("API", "Response received");
             if (response.isSuccessful()) {
                 String json = response.body().string();
-                Log.e("API", "Parsed JSON: " + json);
                 // Désérialisation avec Gson
                 Gson gson = new Gson();
                 Type type = new TypeToken<List<Coiffeur>>(){}.getType();
@@ -43,7 +40,7 @@ public class Api {
         } catch (IOException e) {
             Log.e("API", "Erreur réseau : " + e.getMessage());
         }
-
+        Log.e("API", "Nombre de coiffeurs récupérés : " + coiffeurs);
         return coiffeurs;
     }
     public List<Nouveaute> getNouveautes() {
@@ -51,13 +48,12 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/nouveautes")
+                .url("http://192.168.1.216:5000/nouveautes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 String json = response.body().string();
-                Log.d("API", "Réponse JSON : " + json);
 
                 // Désérialisation directe du tableau JSON
                 Gson gson = new Gson();
@@ -77,7 +73,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/coupes")
+                .url("http://192.168.1.216:5000/coupes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -102,7 +98,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/creneau")
+                .url("http://192.168.1.216:5000/creneau")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -127,7 +123,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/creneauCoiffeur")
+                .url("http://192.168.1.216:5000/creneauCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -152,7 +148,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/coupeCoiffeur")
+                .url("http://192.168.1.216:5000/coupeCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -178,7 +174,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.2.160:5000/photos")
+                .url("http://192.168.1.216:5000/photos")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -258,7 +254,7 @@ public class Api {
         String jsonBody = gson.toJson(client);
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/client") // Update if your endpoint is different
+                .url("http://192.168.1.216:5000/client") // Update if your endpoint is different
                 .post(okhttp3.RequestBody.create(jsonBody, okhttp3.MediaType.parse("application/json")))
                 .build();
 
@@ -284,7 +280,7 @@ public class Api {
         int clientId = Client.CLIENT_COURANT.getId();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/rendezvous")
+                .url("http://192.168.1.216:5000/rendezvous")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -335,7 +331,7 @@ public class Api {
         RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/rendezvous")
+                .url("http://192.168.1.216:5000/rendezvous")
                 .post(body)
                 .build();
 
@@ -351,7 +347,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/rendezvous/" + idRendezVous)
+                .url("http://192.168.1.216:5000/rendezvous/" + idRendezVous)
                 .delete()
                 .build();
 
@@ -382,7 +378,7 @@ public class Api {
         RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/avis")
+                .url("http://192.168.1.216:5000/avis")
                 .post(body)
                 .build();
 
