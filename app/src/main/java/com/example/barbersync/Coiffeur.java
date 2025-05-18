@@ -10,11 +10,13 @@ public class Coiffeur implements Serializable {
     private String biographie;
     private List<CoupeCoiffeur> coupes;
     private List<CreneauCoiffeur> creneaux;
+    private List<Photo> photos;
 
     // Constructeur par défaut
     public Coiffeur() {
         this.coupes = new ArrayList<>();
         this.creneaux = new ArrayList<>();
+        this.photos = new ArrayList<>();
     }
 
     // Constructeur complet
@@ -24,6 +26,7 @@ public class Coiffeur implements Serializable {
         this.biographie = biographie;
         this.coupes = new ArrayList<>();
         this.creneaux = new ArrayList<>();
+        this.photos = new ArrayList<>();
     }
 
     // Getters & Setters
@@ -65,6 +68,12 @@ public class Coiffeur implements Serializable {
 
     public void setCreneaux(List<CreneauCoiffeur> creneaux) {
         this.creneaux = creneaux;
+    }
+
+    public List<Photo> getPhotos() {return this.photos;}
+
+    public void setPhotos(List<Photo> p) {
+        this.photos = p;
     }
 
     // Ajouter une coupe avec tarif

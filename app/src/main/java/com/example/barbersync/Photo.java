@@ -1,10 +1,19 @@
 package com.example.barbersync;
 
-public class Photo {
+import java.io.Serializable;
+
+public class Photo implements Serializable {
     private int id;
     private int user_id;
     private String nomFichierImage;
     private String description;
+
+    public Photo(int id, int user_id, String nomFichierImage, String description) {
+        this.id = id;
+        this.user_id = user_id;
+        this.nomFichierImage = nomFichierImage;
+        this.description = description;
+    }
 
     // Getters
     public int getId() {

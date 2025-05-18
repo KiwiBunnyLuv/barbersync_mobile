@@ -1,9 +1,10 @@
 package com.example.barbersync;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Coupes {
+public class Coupes implements Serializable {
     private int id;
     private String coupe;
     private List<CoupeCoiffeur> coiffeurs;

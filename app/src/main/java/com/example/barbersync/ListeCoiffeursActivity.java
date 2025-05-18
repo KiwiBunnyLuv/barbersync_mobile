@@ -92,8 +92,18 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                Api api = new Api();
-                listeCoiffeurs = api.getCoiffeurs();
+                Database db = new Database(this);
+                listeCoiffeurs = db.getAllCoiffeurs();
+
+
+                //lier les photos et coupes aux coiffeur
+                for(Coiffeur c : listeCoiffeurs)
+                {
+                    List<Photo> photos = db.getPhotosByCoiffeur(c.getId());
+                    c.setPhotos(photos);
+                    List<CoupeCoiffeur> coupe = db.getCoupesByCoiffeur(c.getId());
+                    c.setCoupes(coupe);
+                }
 
                 runOnUiThread(() -> {
                     if (listeCoiffeurs != null && !listeCoiffeurs.isEmpty()) {
@@ -119,4 +129,5 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
             }
         }).start();
     }
+
 }

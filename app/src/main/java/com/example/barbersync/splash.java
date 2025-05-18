@@ -35,7 +35,7 @@ public class splash extends AppCompatActivity {
             // Sinon : erreur de connexion
             Toast.makeText(this, "Problème de connexion à l’API", Toast.LENGTH_LONG).show();
         }
-        Intent intent = new Intent(splash.this, MainActivity.class);
+        Intent intent = new Intent(splash.this, DashBoard.class);
         startActivity(intent);
     }
 }

@@ -25,7 +25,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
         Log.e("API", "getCoiffeurs called");
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/coiffeurs")
+                .url("http://192.168.2.160:5000/coiffeurs")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -51,7 +51,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/nouveautes")
+                .url("http://192.168.2.160:5000/nouveautes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -77,7 +77,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/coupes")
+                .url("http://192.168.2.160:5000/coupes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -102,7 +102,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/creneau")
+                .url("http://192.168.2.160:5000/creneau")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -127,7 +127,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/creneauCoiffeur")
+                .url("http://192.168.2.160:5000/creneauCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -152,7 +152,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/coupeCoiffeur")
+                .url("http://192.168.2.160:5000/coupeCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -178,7 +178,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.0.91:5000/photos")
+                .url("http://192.168.2.160:5000/photos")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
