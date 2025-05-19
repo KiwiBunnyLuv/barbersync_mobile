@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private TextView textResult;
     private final SyncManager sync = new SyncManager();
-    private final Api api = new Api(); // You already defined the API class
+    private final Api api = new Api();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         new Thread(() -> {
-            List<Client> clients = api.getClients();
+            List<Client> clients = SignUpActivity.getHardcodedClients();
             Log.d("LoginDebug", "Number of clients: " + clients.size());
             for (Client client : clients) {
                 Log.d("LoginDebug", "Client: " + client.getEmail() + " | Phone: " + client.getPhone());
@@ -71,16 +71,18 @@ public class MainActivity extends AppCompatActivity {
             Client finalClient = matchedClient;
             runOnUiThread(() -> {
                 if (finalLoginSuccess) {
+                    Client.CLIENT_COURANT = finalClient;
+
                     textResult.setText("Welcome, " + finalClient.getName());
                     Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(MainActivity.this, DashBoard.class);
 
-                    // Pass client data if needed
                     intent.putExtra("client_name", finalClient.getName());
                     intent.putExtra("client_email", finalClient.getEmail());
 
                     startActivity(intent);
+                    finish();
                 } else {
                     textResult.setText("Login failed");
                     Toast.makeText(MainActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();

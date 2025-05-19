@@ -1,6 +1,7 @@
 package com.example.barbersync;
 import android.os.Parcel;
-public class Client{
+import java.io.Serializable;
+public class Client implements Serializable{
     private int id;
     private String name;
     private String email;

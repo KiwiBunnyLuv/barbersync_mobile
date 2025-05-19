@@ -46,6 +46,7 @@
         <activity
             android:name=".coiffeurs"
             android:exported="false" />
+        <activity android:name=".ModifyClientActivity" />
         <activity
             android:name=".DashBoard"
             android:exported="true"

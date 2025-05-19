@@ -36,6 +36,7 @@
             android:src="@drawable/moustache" />
 
         <TextView
+            android:id="@+id/nameMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ramin Amiri"
@@ -52,6 +53,7 @@
         android:padding="16dp">
 
         <Button
+            android:id="@+id/btnModifierClient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Modifier le profil"
@@ -78,6 +80,7 @@
 
         <!-- Logout Button -->
         <Button
+            android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Se déconnecter"

@@ -74,6 +74,15 @@ public class Database extends SQLiteOpenHelper {
                 "nomFichierImage TEXT, " +
                 "description TEXT, " +
                 "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id))");
+        db.execSQL("CREATE TABLE clients (" +
+                "id INTEGER PRIMARY KEY, " +
+                "name TEXT, " +
+                "email TEXT, " +
+                "address TEXT, " +
+                "city TEXT, " +
+                "province TEXT, " +
+                "postal_code TEXT, " +
+                "phone TEXT)");
     }
 
     @Override

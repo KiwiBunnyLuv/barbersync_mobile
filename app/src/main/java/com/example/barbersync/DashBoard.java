@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
+import android.widget.TextView;
 
 public class DashBoard extends AppCompatActivity {
 
@@ -21,6 +22,13 @@ public class DashBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        TextView welcomeMessage = findViewById(R.id.welcomeMessage);
+
+        if (Client.CLIENT_COURANT != null) {
+            welcomeMessage.setText("Bienvenue " + Client.CLIENT_COURANT.getName());
+        } else {
+            welcomeMessage.setText("Bienvenue Samit.");
+        }
         // Pour afficher les nouveautes
         recyclerViewNouveautes = findViewById(R.id.recyclerViewNouveautes);
         recyclerViewNouveautes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
