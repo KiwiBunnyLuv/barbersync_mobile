@@ -21,19 +21,19 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Table coiffeurs
         db.execSQL("CREATE TABLE coiffeurs (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "name TEXT, " +
                 "biographie TEXT)");
 
         // Table coupes
         db.execSQL("CREATE TABLE coupes (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "coupe TEXT)");
 
 
         // Table creneaux
         db.execSQL("CREATE TABLE creneaux (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "date TEXT, " +
                 "heure_debut TEXT," +
                 "heure_fin TEXT)");
@@ -69,7 +69,7 @@ public class Database extends SQLiteOpenHelper {
 
         // Table photos
         db.execSQL("CREATE TABLE photos (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "coiffeur_id INTEGER, " +
                 "nomFichierImage TEXT, " +
                 "description TEXT, " +
@@ -136,7 +136,7 @@ public class Database extends SQLiteOpenHelper {
     public void insertPhoto(Photo p) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
+        values.put("id", p.getId()); // Assurez-vous que l'ID est unique
         values.put("coiffeur_id", p.getUser_id());
         values.put("nomFichierImage", p.getNomFichierImage());
         values.put("description", p.getDescription());
