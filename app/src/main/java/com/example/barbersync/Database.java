@@ -74,6 +74,8 @@ public class Database extends SQLiteOpenHelper {
                 "nomFichierImage TEXT, " +
                 "description TEXT, " +
                 "FOREIGN KEY(coiffeur_id) REFERENCES coiffeurs(id))");
+
+        // Table clients
         db.execSQL("CREATE TABLE clients (" +
                 "id INTEGER PRIMARY KEY, " +
                 "name TEXT, " +
@@ -83,6 +85,13 @@ public class Database extends SQLiteOpenHelper {
                 "province TEXT, " +
                 "postal_code TEXT, " +
                 "phone TEXT)");
+
+        // Table notifications
+        db.execSQL("CREATE TABLE notifications (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "title TEXT, " +
+                "message TEXT, " +
+                "is_read INTEGER DEFAULT 0)");
     }
 
     @Override
@@ -265,6 +274,41 @@ public class Database extends SQLiteOpenHelper {
         }
         cursor.close();
         return nouveautes;
+    }
+    public void insertNotification(Notification notification) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", notification.getTitle());
+        values.put("message", notification.getMessage());
+        values.put("is_read", notification.isRead() ? 1 : 0);
+        db.insert("notifications", null, values);
+    }
+
+    public List<Notification> getAllNotifications() {
+        List<Notification> notifications = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM notifications", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Notification notification = new Notification(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("message")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("is_read")) == 1
+                );
+                notifications.add(notification);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return notifications;
+    }
+
+    public void markNotificationAsRead(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_read", 1);
+        db.update("notifications", values, "id = ?", new String[]{String.valueOf(id)});
     }
 
 }

@@ -46,5 +46,14 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        findViewById(R.id.nav_home).setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, DashBoard.class);
+            startActivity(intent);
+        });
+
+        findViewById(R.id.nav_scissors).setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, ListeCoiffeursActivity.class);
+            startActivity(intent);
+        });
     }
 }

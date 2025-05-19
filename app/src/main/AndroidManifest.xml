@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".coiffeurDetailActivity"
             android:exported="false" />
         <activity
@@ -50,18 +53,16 @@
         <activity
             android:name=".DashBoard"
             android:exported="true"
-            android:label="Dashboard" >
-
-        </activity>
+            android:label="Dashboard"></activity>
         <activity android:name=".SignUpActivity" />
         <activity
             android:name=".splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

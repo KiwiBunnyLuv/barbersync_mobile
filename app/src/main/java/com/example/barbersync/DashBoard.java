@@ -22,6 +22,11 @@ public class DashBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        findViewById(R.id.notification).setOnClickListener(v -> {
+            Intent intent = new Intent(DashBoard.this, NotificationActivity.class);
+            startActivity(intent);
+        });
+
         TextView welcomeMessage = findViewById(R.id.welcomeMessage);
 
         if (Client.CLIENT_COURANT != null) {
