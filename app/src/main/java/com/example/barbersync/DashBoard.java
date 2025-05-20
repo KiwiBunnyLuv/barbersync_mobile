@@ -13,15 +13,27 @@
  ****************************************/
 
 package com.example.barbersync;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
+
 import android.widget.TextView;
 
 public class DashBoard extends AppCompatActivity {
@@ -35,6 +47,9 @@ public class DashBoard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+        checkNotificationPermission();
+        // Planifier le Worker pour une notification quotidienne
+        scheduleNotificationAtSpecificTime(9,0);
 
         findViewById(R.id.notification).setOnClickListener(v -> {
             Intent intent = new Intent(DashBoard.this, NotificationActivity.class);
@@ -85,5 +100,39 @@ public class DashBoard extends AppCompatActivity {
             Intent intent = new Intent(DashBoard.this, ListeCoiffeursActivity.class);
             startActivity(intent);
         });
+    }
+    private void checkNotificationPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
+    }
+
+    private void scheduleNotificationAtSpecificTime(int hour, int minute) {
+        // Obtenez l'heure actuelle
+        Calendar currentTime = Calendar.getInstance();
+
+        // Configurez l'heure cible
+        Calendar targetTime = Calendar.getInstance();
+        targetTime.set(Calendar.HOUR_OF_DAY, hour);
+        targetTime.set(Calendar.MINUTE, minute);
+        targetTime.set(Calendar.SECOND, 0);
+
+        // Si l'heure cible est déjà passée aujourd'hui, planifiez pour demain
+        if (targetTime.before(currentTime)) {
+            targetTime.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        // Calculez le délai en millisecondes
+        long delay = targetTime.getTimeInMillis() - currentTime.getTimeInMillis();
+
+        // Créez une requête pour exécuter le Worker après le délai
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(DailyNotificationWorker.class)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .build();
+
+        // Enfilez la requête
+        WorkManager.getInstance(this).enqueue(notificationWork);
     }
 }
