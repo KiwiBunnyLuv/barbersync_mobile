@@ -49,7 +49,7 @@ public class DashBoard extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
         checkNotificationPermission();
         // Planifier le Worker pour une notification quotidienne
-        scheduleNotificationAtSpecificTime(9,0);
+        scheduleDailyNotification(9,0);
 
         findViewById(R.id.notification).setOnClickListener(v -> {
             Intent intent = new Intent(DashBoard.this, NotificationActivity.class);
@@ -109,30 +109,30 @@ public class DashBoard extends AppCompatActivity {
         }
     }
 
-    private void scheduleNotificationAtSpecificTime(int hour, int minute) {
-        // Obtenez l'heure actuelle
+    private void scheduleDailyNotification(int hour, int minute) {
         Calendar currentTime = Calendar.getInstance();
-
-        // Configurez l'heure cible
         Calendar targetTime = Calendar.getInstance();
         targetTime.set(Calendar.HOUR_OF_DAY, hour);
         targetTime.set(Calendar.MINUTE, minute);
         targetTime.set(Calendar.SECOND, 0);
 
-        // Si l'heure cible est déjà passée aujourd'hui, planifiez pour demain
         if (targetTime.before(currentTime)) {
             targetTime.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        // Calculez le délai en millisecondes
-        long delay = targetTime.getTimeInMillis() - currentTime.getTimeInMillis();
+        long initialDelay = targetTime.getTimeInMillis() - currentTime.getTimeInMillis();
 
-        // Créez une requête pour exécuter le Worker après le délai
-        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(DailyNotificationWorker.class)
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+        PeriodicWorkRequest notificationWork = new PeriodicWorkRequest.Builder(
+                DailyNotificationWorker.class,
+                1, TimeUnit.DAYS
+        )
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
                 .build();
 
-        // Enfilez la requête
-        WorkManager.getInstance(this).enqueue(notificationWork);
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "DailyNotificationWork",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                notificationWork
+        );
     }
 }
