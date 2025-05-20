@@ -1,3 +1,17 @@
+/****************************************
+ Fichier : NouveauteDetailActivity.java
+ Auteur : Nicolas Beaudoin
+ Fonctionnalité : Affiche les détails d'une nouveauté
+ Date : 2025-05-07
+
+ Vérification :
+ 2025-05-20     Yassine Abide        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-20     Nicolas Beaudoin           Ajout de commentaires et javadoc
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Intent;
@@ -6,7 +20,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
+/**
+ * Activité affichant les détails d'une nouveauté.
+ */
 public class NouveauteDetailActivity extends AppCompatActivity {
 
     @Override

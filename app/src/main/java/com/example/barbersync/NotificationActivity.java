@@ -1,3 +1,21 @@
+/****************************************
+ Fichier : NotificationActivity.java
+ Auteur : Nicolas Beaudoin
+ Fonctionnalité : Affiche la liste des notifications
+ Date : 2025-05-13
+
+ Vérification :
+ 2025-05-15     Ramin Amiri        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-16     Nicolas Beaudoin        Modification des
+                                        notifications pour qu'elles soient
+                                        cliquables et marquées comme lues
+ 2025-05-20     Nicolas Beaudoin           Ajout de commentaires
+ =========================================================
+ ****************************************/
+
+
 package com.example.barbersync;
 
 import android.content.Intent;

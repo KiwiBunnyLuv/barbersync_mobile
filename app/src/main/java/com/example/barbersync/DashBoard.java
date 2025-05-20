@@ -1,3 +1,17 @@
+/****************************************
+ Fichier : DashBoard.java
+ Auteur : Nicolas Beaudoin
+ Fonctionnalité : MOBINT1 --- Affiche le tableau de bord principal
+ Date : 2025-05-13
+
+ Vérification :
+ 2025-05-15     Yassine Abide      Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-20     Nicolas Beaudoin           Ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 import android.content.Intent;
 import android.os.Bundle;
