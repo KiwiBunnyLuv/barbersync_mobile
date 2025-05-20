@@ -1,3 +1,17 @@
+/****************************************
+ Fichier : Splash.java
+ Auteur : samit sabah adelyar
+ Fonctionnalité : aucune, c'est l'ecran de chargment du début
+ Date : 2025-05-10
+
+ Vérification :
+ 2025-05-12     Nicolas Beaudoin        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-20     Samit Adelyar           ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Intent;
@@ -20,9 +34,10 @@ public class splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
 
-        new Handler().postDelayed(() -> synchroniserAPI(), 1500); // 1.5s de splash
+        new Handler().postDelayed(() -> synchroniserAPI(), 1500); // appelle synchroniser API et met un delai avec d'allant a l'autre page
     }
 
+    //methode qui gere la synchronisation de l'api
     private void synchroniserAPI() {
        SyncManager synchro = new SyncManager();
 

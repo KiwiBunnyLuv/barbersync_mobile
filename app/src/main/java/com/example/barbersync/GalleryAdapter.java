@@ -1,3 +1,18 @@
+/****************************************
+ Fichier : GalleryAdater.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBSER2 (détail d'un coiffeur) - affiche la galerie
+ Date : 2025-05-17
+
+
+ Vérification :
+ 2025-05-20     Nicolas Beaudoin        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-20     Samit Adelyar           ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 
@@ -40,9 +55,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
-        // Format rating and reviews text based on your Coiffeur object structure
-        //textViewRating.setText(coiffeur.getRating() + " ★★★★☆ (" + coiffeur.getNumberOfReviews() + ")");
 
+        //construire url
         String baseUrl = "http://192.168.2.160:5000/galeries/";
         String encodedName = android.net.Uri.encode(coiffeur.getName());
         String encodedFileName = android.net.Uri.encode(coiffeur.getPhotos().get(position).getNomFichierImage());
@@ -50,12 +64,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
         Log.d(TAG, "URL encodée de l'image: " + fullUrl);
 
-        // Configuration plus stricte de Glide
+        //utilisation de glide pour prendre image
         Glide.with(context)
-                .load(fullUrl)// Dimensions spécifiques
-                .centerCrop()        // Mode d'échelle
-                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Désactiver le cache
-                .skipMemoryCache(true)                      // Désactiver le cache mémoire
+                .load(fullUrl)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .placeholder(R.drawable.scissors)
                 .into(holder.imageViewGalleryPhoto);
     }

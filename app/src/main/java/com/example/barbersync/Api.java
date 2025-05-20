@@ -1,3 +1,22 @@
+/****************************************
+ Fichier : Api.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBINT1 --- classe qui fait tous les appels des api --- Samit a fait la logique générale de cette classe ainsi que coiffeur, coupe et photos
+ Date : 2025-05-13
+
+
+ Vérification :
+ 2025-05-15     Ramin Amiri, Nicolas Beaudoin, Samit Adelyar, Ramin Amiri        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-16     Yassine Abide           Ajout des api de client
+ 2025-05-16     Ramin Amiri             Ajout des api de avis
+ 2025-05-17     Ramin Amiri             Ajout des api de rdv
+ 2025-05-19     Nicolas Beaudoin         Ajout des api de nouveautés
+ 2025-05-20     Samit Adelyar           ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.util.Log;
@@ -19,7 +38,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class Api {
-
+    //api pour tous les coiffeurs
     public List<Coiffeur> getCoiffeurs(){
         List<Coiffeur> coiffeurs = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -30,8 +49,8 @@ public class Api {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 String json = response.body().string();
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+
+                Gson gson = new Gson(); // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<Coiffeur>>(){}.getType();
                 coiffeurs = gson.fromJson(json, type);
             } else {
@@ -43,6 +62,8 @@ public class Api {
         Log.e("API", "Nombre de coiffeurs récupérés : " + coiffeurs);
         return coiffeurs;
     }
+
+    // api pour tous les nouveautes
     public List<Nouveaute> getNouveautes() {
         List<Nouveaute> nouveautes = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -55,8 +76,7 @@ public class Api {
             if (response.isSuccessful()) {
                 String json = response.body().string();
 
-                // Désérialisation directe du tableau JSON
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<Nouveaute>>() {}.getType();
                 nouveautes = gson.fromJson(json, type);
             } else {
@@ -68,6 +88,8 @@ public class Api {
 
         return nouveautes;
     }
+
+    //api pour prendre tous les coiffeurs
     public List<Coupes> getCoupes(){
         List<Coupes> Coupes = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -80,8 +102,7 @@ public class Api {
             if (response.isSuccessful()) {
                 String json = response.body().string();
 
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<Coupes>>(){}.getType();
                 Coupes = gson.fromJson(json, type);
             } else {
@@ -93,6 +114,7 @@ public class Api {
 
         return Coupes;
     }
+    //api pour prendre tous les creneaux
     public List<Creneau> getCreneau(){
         List<Creneau> Creneau = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -105,8 +127,7 @@ public class Api {
             if (response.isSuccessful()) {
                 String json = response.body().string();
 
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<Creneau>>(){}.getType();
                 Creneau = gson.fromJson(json, type);
             } else {
@@ -118,6 +139,7 @@ public class Api {
 
         return Creneau;
     }
+    //api pour prendre tous les creneauCoiffeur
     public List<CreneauCoiffeur> getCreneauCoiffeur(){
         List<CreneauCoiffeur> CreneauCoiffeur = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -130,8 +152,7 @@ public class Api {
             if (response.isSuccessful()) {
                 String json = response.body().string();
 
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<CreneauCoiffeur>>(){}.getType();
                 CreneauCoiffeur = gson.fromJson(json, type);
             } else {
@@ -143,6 +164,8 @@ public class Api {
 
         return CreneauCoiffeur;
     }
+
+    //api pour prendre tous les coupeCoiffeurs
     public List<CoupeCoiffeur> getCoupeCoiffeurs(){
         List<CoupeCoiffeur> CoupeCoiffeur = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -155,8 +178,7 @@ public class Api {
             if (response.isSuccessful()) {
                 String json = response.body().string();
 
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<CoupeCoiffeur>>(){}.getType();
                 CoupeCoiffeur = gson.fromJson(json, type);
             } else {
@@ -169,6 +191,7 @@ public class Api {
         return CoupeCoiffeur;
     }
 
+    //api qui reprend toutes les photos
     public List<Photo> getPhoto(){
         List<Photo> photo = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -181,8 +204,7 @@ public class Api {
             if (response.isSuccessful()) {
                 String json = response.body().string();
 
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<Photo>>(){}.getType();
                 photo = gson.fromJson(json, type);
             } else {
@@ -219,6 +241,8 @@ public class Api {
 
         return clients;
     }*/
+
+
     //hard coded
     public List<Client> getClients() {
         List<Client> clients = new ArrayList<>();
@@ -272,7 +296,7 @@ public class Api {
         return false;
     }
 
-
+    //api qui reprend tous les rendez-vous
     public List<RendezVous> getRendezVous() {
         List<RendezVous> rendezVousList = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -286,9 +310,7 @@ public class Api {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 String json = response.body().string();
-
-                // Désérialisation avec Gson
-                Gson gson = new Gson();
+                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
                 Type type = new TypeToken<List<RendezVous>>(){}.getType();
                 rendezVousList = gson.fromJson(json, type);
 
@@ -311,6 +333,7 @@ public class Api {
         return rendezVousList;
     }
 
+    //api pour créer un rendezVous
     public boolean creerRendezVous(int idCreneau, int idClient, String typeService, double prix, int idCoiffeur) {
         OkHttpClient client = new OkHttpClient();
 
@@ -343,6 +366,7 @@ public class Api {
         }
     }
 
+    //api pour annuler un rendez-vous
     public boolean annulerRendezVous(int idRendezVous) {
         OkHttpClient client = new OkHttpClient();
 
@@ -359,6 +383,7 @@ public class Api {
         }
     }
 
+    //api pour ajouter un avis
     public boolean ajouterAvis(int idRendezVous, String titre, String commentaire, int note) {
         OkHttpClient client = new OkHttpClient();
 

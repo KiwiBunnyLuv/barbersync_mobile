@@ -1,3 +1,19 @@
+/****************************************
+ Fichier : ListeCoiffeursActivity.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBSER1 (lister les coiffeurs)
+ Date : 2025-05-11
+
+
+ Vérification :
+ 2025-05-12     Nicolas Beaudoin        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-15     Ramin Amiri         aide pour la barre de navigation
+ 2025-05-20     Samit Adelyar          ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Intent;
@@ -26,10 +42,11 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
 
         try {
             initialiserVues();
+
+            //topbar et navbar
             configurerBoutonRetour();
             configurerNavBar();
 
-            // Charger les coiffeurs
             chargerCoiffeurs();
         } catch (Exception e) {
             Toast.makeText(this, "Erreur lors de l'initialisation: " + e.getMessage(),
@@ -38,6 +55,7 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
         }
     }
 
+    //initialiser les variable de vues
     private void initialiserVues() {
         recyclerViewCoiffeurs = findViewById(R.id.recyclerViewCoiffeurs);
         btnRetour = findViewById(R.id.btnRetour);
@@ -45,12 +63,14 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
         recyclerViewCoiffeurs.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    //configurer bouton retour en haut de l'écran
     private void configurerBoutonRetour() {
         if (btnRetour != null) {
             btnRetour.setOnClickListener(v -> finish());
         }
     }
 
+    //configuration de la nav bar
     private void configurerNavBar() {
         // Navigation vers l'accueil
         ImageButton homeButton = findViewById(R.id.nav_home);
@@ -83,6 +103,7 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
         }
     }
 
+    //methode qui charge les coiffeur
     private void chargerCoiffeurs() {
         // Afficher un indicateur de chargement
         View progressBar = findViewById(R.id.progressBar);
@@ -96,7 +117,7 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
                 listeCoiffeurs = db.getAllCoiffeurs();
 
 
-                //lier les photos et coupes aux coiffeur
+                //c'est ici qu'on met les photos et les coupes dans l'objet des coiffeurs
                 for(Coiffeur c : listeCoiffeurs)
                 {
                     List<Photo> photos = db.getPhotosByCoiffeur(c.getId());
@@ -107,7 +128,7 @@ public class ListeCoiffeursActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (listeCoiffeurs != null && !listeCoiffeurs.isEmpty()) {
-                        CoiffeurListAdapter adapter = new CoiffeurListAdapter(this, listeCoiffeurs);
+                        CoiffeurListAdapter adapter = new CoiffeurListAdapter(this, listeCoiffeurs); //appelle de coiffeurListAdapter
                         recyclerViewCoiffeurs.setAdapter(adapter);
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);

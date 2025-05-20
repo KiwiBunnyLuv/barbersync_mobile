@@ -1,3 +1,24 @@
+/****************************************
+ Fichier : Database.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBINT1 --- classe qui fait la base de données locale --- Samit a fait la logique générale de cette classe+ squelette ainsi que les tables coiffeur,
+ coupe, coiffeur_coupes et photos ( et leurs méthodes
+
+ Date : 2025-05-13
+
+
+ Vérification :
+ 2025-05-15     Ramin Amiri, Nicolas Beaudoin, samit adelyar, Yassine Abide        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-16     Ramin Amiri             Ajout de la table rdv et creneau avec les fonctions réliés
+ 2025-05-17     Ramin Amiri             Ajout de la table avis avec ses fonctions
+ 2025-05-19     Nicolas Beaudoin         Ajout de la table nouveautés
+ 2025-05-20     Samit Adelyar           ajout de commentaires et javadoc
+ =========================================================
+ ****************************************/
+
+
 package com.example.barbersync;
 
 import android.content.ContentValues;

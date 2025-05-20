@@ -1,3 +1,19 @@
+/****************************************
+ Fichier : coiffeurDetailActivity.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBSER2 (détail d'un coiffeur)
+ Date : 2025-05-17
+
+
+ Vérification :
+ 2025-05-20     Nicolas Beaudoin        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-15     Ramin Amiri           ajout de ma partie dans les intent
+ 2025-05-20     Samit Adelyar           ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 
@@ -41,7 +57,7 @@ public class coiffeurDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_coiffeur_detail);
 
 
-        // Find views
+        // initialiser id des vues
         imageViewCoiffeurProfile = findViewById(R.id.imageViewCoiffeurProfile);
         textViewCoiffeurName = findViewById(R.id.textViewCoiffeurName);
         textViewRating = findViewById(R.id.textViewRating);
@@ -52,6 +68,7 @@ public class coiffeurDetailActivity extends AppCompatActivity {
         biographie = findViewById(R.id.biographie);
         btnRetour = findViewById(R.id.btnRetour);
 
+        //navbar et topbar
         configurerBoutonRetour();
         configurerNavBar();
 
@@ -59,15 +76,15 @@ public class coiffeurDetailActivity extends AppCompatActivity {
 
 
 
-        // Get Coiffeur object (example - you might pass it via Intent)
+        // recupérer le coiffeur
         Coiffeur coiffeur = (Coiffeur) getIntent().getSerializableExtra("coiffeur");;
 
+        //set la vues avec les informations du coiffeur
         if (coiffeur != null) {
-            // Populate views
             textViewCoiffeurName.setText(coiffeur.getName());
             biographie.setText(coiffeur.getBiographie());
 
-            // Format rating and reviews text based on your Coiffeur object structure
+
             //textViewRating.setText(coiffeur.getRating() + " ★★★★☆ (" + coiffeur.getNumberOfReviews() + ")");
 
             String baseUrl = "http://192.168.2.160:5000/galeries/";
@@ -77,24 +94,24 @@ public class coiffeurDetailActivity extends AppCompatActivity {
 
             Log.d(TAG, "URL encodée de l'image: " + fullUrl);
 
-            // Configuration plus stricte de Glide
-            Glide.with(this) // Utiliser le contexte de l'application pour éviter les fuites
-                    .load(fullUrl)// Dimensions spécifiques
+
+            Glide.with(this)
+                    .load(fullUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
-                    .centerCrop()        // Mode d'échelle
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)  // Désactiver le cache
-                    .skipMemoryCache(true)                      // Désactiver le cache mémoire
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .placeholder(R.drawable.scissors)
                     .into(imageViewCoiffeurProfile);
 
 
 
-            // Set up Gallery RecyclerView
-            GalleryAdapter galleryAdapter = new GalleryAdapter(coiffeur, this); // Assuming Coiffeur has a method for photo URLs
+            // appeler gallery Adapter
+            GalleryAdapter galleryAdapter = new GalleryAdapter(coiffeur, this);
             recyclerViewGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             recyclerViewGallery.setAdapter(galleryAdapter);
 
-            // Set up Services RecyclerView
+            // appeler services adapter
             ServicesAdapter servicesAdapter = new ServicesAdapter(coiffeur); // Assuming Coiffeur has a method for services list
             recyclerViewServices.setLayoutManager(new LinearLayoutManager(this)); // Vertical by default
             recyclerViewServices.setAdapter(servicesAdapter);
@@ -105,20 +122,20 @@ public class coiffeurDetailActivity extends AppCompatActivity {
         }
     }
 
-    // Dummy method to get Coiffeur data (replace with your actual data retrieval)
-
-    // Implement these methods to handle button clicks
+    // appelle les reviews
     private void consultReviews(Coiffeur coiffeur, Context context) {
         Intent intent = new Intent(context, coiffeurDetailActivity.class);
         intent.putExtra("coiffeur", coiffeur);
         context.startActivity(intent);
     }
 
+    // appelle l'activity qui met les rendez-vous
     private void takeAppointment(Coiffeur coiffeur, Context context) {
         Intent intent = new Intent(context, coiffeurDetailActivity.class);
         intent.putExtra("coiffeur", coiffeur);
         context.startActivity(intent);
     }
+    //methode pour la barre de navigaiton
     private void configurerNavBar() {
         // Navigation vers l'accueil
         ImageButton homeButton = findViewById(R.id.nav_home);
@@ -151,6 +168,7 @@ public class coiffeurDetailActivity extends AppCompatActivity {
             });
         }
     }
+    //bouton retour en haut de l'écran
     private void configurerBoutonRetour() {
         if (btnRetour != null) {
             btnRetour.setOnClickListener(v -> {

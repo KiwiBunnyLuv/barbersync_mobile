@@ -1,3 +1,18 @@
+/****************************************
+ Fichier : GalleryAdater.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBSER2 (détail d'un coiffeur) - affiche les services
+ Date : 2025-05-17
+
+
+ Vérification :
+ 2025-05-20     Nicolas Beaudoin        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-20     Samit Adelyar           ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +30,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
     private Coiffeur coiffeur;
     private Context context;
 
+    //constructeur de la classe
     public ServicesAdapter(Coiffeur c) {
         this.coiffeur = c;
     }
@@ -28,7 +44,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
 
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
-        if(coiffeur.getCoupes().get(position).getPrix() != 0) {
+        if(coiffeur.getCoupes().get(position).getPrix() != 0) { //filtre les coupes pas prises en compte par le coiffeur
             String service = coiffeur.getCoupes().get(position).getNom() + " - " + coiffeur.getCoupes().get(position).getPrix() + " $";
             holder.textViewService.setText(service);
 

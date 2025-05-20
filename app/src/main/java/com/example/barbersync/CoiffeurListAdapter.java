@@ -1,3 +1,19 @@
+/****************************************
+ Fichier : CoiffeurListAdapter.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBSER1 (lister les coiffeurs)
+ Date : 2025-05-11
+
+
+ Vérification :
+ 2025-05-12     Nicolas Beaudoin        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-16     Yassine Abide           correction du bug Glide
+ 2025-05-20     Samit Adelyar           ajout de commentaires
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Context;
@@ -79,43 +95,16 @@ public class CoiffeurListAdapter extends RecyclerView.Adapter<CoiffeurListAdapte
 
                 Log.d(TAG, "URL encodée de l'image: " + fullUrl);
 
-                // Configuration plus stricte de Glide
-                Glide.with(context.getApplicationContext()) // Utiliser le contexte de l'application pour éviter les fuites
+                // Glide pour reprendre l'image
+                Glide.with(context.getApplicationContext())
                         .load(fullUrl)
-                        .override(500, 500)  // Dimensions spécifiques
+                        .override(500, 500)
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
-                        .centerCrop()        // Mode d'échelle
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)  // Désactiver le cache
-                        .skipMemoryCache(true)                      // Désactiver le cache mémoire
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .placeholder(R.drawable.scissors)
                         .error(R.drawable.scissors)
-                        .listener(new RequestListener<android.graphics.drawable.Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@androidx.annotation.Nullable GlideException e, Object model,
-                                                        Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
-                                Log.e(TAG, "❌ Échec de chargement pour l'image: " + fullUrl);
-                                if (e != null) {
-                                    Log.e(TAG, "Raison: " + e.getMessage());
-                                    for (Throwable t : e.getRootCauses()) {
-                                        Log.e(TAG, "Cause: " + t.getMessage());
-                                    }
-                                }
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model,
-                                                           Target<android.graphics.drawable.Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                Log.d(TAG, "✅ Image chargée avec succès pour: " + coiffeur.getName());
-
-                                // Détails supplémentaires sur l'image chargée
-                                Log.d(TAG, "Dimensions de l'image: " +
-                                        resource.getIntrinsicWidth() + "x" + resource.getIntrinsicHeight() +
-                                        " Alpha: " + resource.getAlpha());
-
-                                return false;
-                            }
-                        })
                         .into(holder.photoCoiffeur);
             } else {
                 Log.w(TAG, "Pas de photos disponibles pour: " + coiffeur.getName());
@@ -157,7 +146,7 @@ public class CoiffeurListAdapter extends RecyclerView.Adapter<CoiffeurListAdapte
 
             // Vérifier si l'ImageView a été correctement trouvé
             if (photoCoiffeur == null) {
-                Log.e("CoiffeurAdapter", "❌ ERREUR CRITIQUE: ImageView avec id 'photo' non trouvé dans le layout!");
+                Log.e(TAG, "ImageView avec id 'photo' non trouvé dans le layout!");
             } else {
                 // Définir des paramètres de base pour s'assurer que l'image s'affichera
                 photoCoiffeur.setScaleType(ImageView.ScaleType.CENTER_CROP);

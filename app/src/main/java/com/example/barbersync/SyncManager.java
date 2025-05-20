@@ -1,3 +1,22 @@
+/****************************************
+ Fichier : SyncManager.java
+ Auteur : Samit Sabah Adelyar
+ Fonctionnalité : MOBINT1 --- classe qui fait la synchronisation entre bd local et centrale --- Samit a fait la logique générale de cette classe+ squelette
+ ainsi que les synchro coiffeur, coupe, coiffeur_coupes et photos
+ Date : 2025-05-13
+
+
+ Vérification :
+ 2025-05-15     Ramin Amiri, Nicolas Beaudoin, samit adelyar, Yassine Abide        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-16     Ramin Amiri             synchro rdv et creneau avec les fonctions réliés
+ 2025-05-16     Ramin Amiri             synchro avis avec ses fonctions
+ 2025-05-16     Nicolas Beaudoin        synchro nouveautés
+ 2025-05-20     Samit Adelyar           ajout de commentaires et javadoc
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Context;
