@@ -28,7 +28,7 @@ import java.util.List;
 
 public class SyncManager {
     private boolean isSyncing = false;
-    public synchronized void synchroniserDepuisApi(Context context) {
+    public synchronized void synchroniserDepuisApi(Context context) throws Exception {
         if (isSyncing) {
             Log.d("SYNC", "Synchronisation déjà en cours, annulation de l'appel.");
             return;
@@ -110,9 +110,11 @@ public class SyncManager {
                 } else {
                     Log.e("SYNC", "Échec de la récupération des photos");
                 }
+            } catch (Exception e) {
+                    Log.d("api",e.toString());
+                }
 
-
-            } finally {
+             finally {
                 isSyncing = false;
             }
         }).start();

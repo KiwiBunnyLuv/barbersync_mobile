@@ -19,6 +19,7 @@
 
 package com.example.barbersync;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -55,6 +56,7 @@ public class Api {
                 coiffeurs = gson.fromJson(json, type);
             } else {
                 Log.e("API", "Erreur HTTP coiffeur : " + response.code());
+
             }
         } catch (IOException e) {
             Log.e("API", "Erreur réseau : " + e.getMessage());
