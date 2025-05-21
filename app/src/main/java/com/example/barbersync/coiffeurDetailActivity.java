@@ -87,7 +87,8 @@ public class coiffeurDetailActivity extends AppCompatActivity {
 
             //textViewRating.setText(coiffeur.getRating() + " ★★★★☆ (" + coiffeur.getNumberOfReviews() + ")");
 
-            String baseUrl = "http://192.168.2.160:5000/galeries/";
+            //photo de profil
+            String baseUrl = "http://192.168.11.212:5000/galeries/";
             String encodedName = android.net.Uri.encode(coiffeur.getName());
             String encodedFileName = android.net.Uri.encode(coiffeur.getPhotos().get(0).getNomFichierImage());
             String fullUrl = baseUrl + encodedName + "/" + encodedFileName;

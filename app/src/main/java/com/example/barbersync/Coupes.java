@@ -53,9 +53,9 @@ public class Coupes implements Serializable {
         return this.coupe;
     }
 
-    /** @param nom le nom de la coupe à définir */
-    public void setNom(String nom) {
-        this.coupe = nom;
+    /** @param coupe le nom de la coupe à définir */
+    public void setNom(String coupe) {
+        this.coupe = coupe;
     }
 
     /** @return la liste des coiffeurs associés à cette coupe */

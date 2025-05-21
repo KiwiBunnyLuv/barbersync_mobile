@@ -27,12 +27,12 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.util.Log;
 import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
     private static final String DB_NAME = "barbersync.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 8;
 
     public Database(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -122,8 +122,10 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS photos");
         db.execSQL("DROP TABLE IF EXISTS creneaux");
         db.execSQL("DROP TABLE IF EXISTS coupes");
+        db.execSQL("DROP TABLE IF EXISTS clients");
         db.execSQL("DROP TABLE IF EXISTS coiffeurs");
         db.execSQL("DROP TABLE IF EXISTS nouveautes");
+        db.execSQL("DROP TABLE IF EXISTS notifications");
         onCreate(db);
     }
 
@@ -137,6 +139,7 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public void insertCoupe(Coupes c) {
+        Log.d("coupe", "coupe : " + c.getNom());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("id", c.getId());
