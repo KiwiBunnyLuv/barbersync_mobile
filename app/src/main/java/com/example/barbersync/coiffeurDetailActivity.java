@@ -40,7 +40,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 
 public class coiffeurDetailActivity extends AppCompatActivity {
-
     private ImageView imageViewCoiffeurProfile;
     private TextView textViewCoiffeurName;
     private TextView textViewRating;

@@ -44,7 +44,7 @@ public class Api {
         List<Coiffeur> coiffeurs = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/coiffeurs")
+                .url("http://192.168.1.216:5000/coiffeurs")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -71,16 +71,38 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/nouveautes")
+                .url("http://192.168.1.216:5000/nouveautes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 String json = response.body().string();
+                Log.d("API_DEBUG", "JSON brut des nouveautés: " + json);
 
-                Gson gson = new Gson();  // gson arrive a créer un classe a partir de json
-                Type type = new TypeToken<List<Nouveaute>>() {}.getType();
-                nouveautes = gson.fromJson(json, type);
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<Nouveaute>>() {}.getType();
+                    nouveautes = gson.fromJson(json, type);
+
+                    // Vérifier chaque nouveauté après désérialisation
+                    for (Nouveaute n : nouveautes) {
+                        Log.d("API_DEBUG", "Nouveauté: id=" + n.getId() +
+                                ", nom=" + n.getNom() +
+                                ", description=" + n.getDescription() +
+                                ", dateDebut=" + n.getDateDebut() +
+                                ", dateFin=" + n.getDateFin());
+
+                        // Ajouter une vérification de nullité ici
+                        if (n.getDateDebut() == null) {
+                            n.setDateDebut(""); // Valeur par défaut
+                        }
+                        if (n.getDateFin() == null) {
+                            n.setDateFin(""); // Valeur par défaut
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e("API_DEBUG", "Erreur lors de la désérialisation: " + e.getMessage(), e);
+                }
             } else {
                 Log.e("API", "Erreur HTTP nouveates : " + response.code());
             }
@@ -97,7 +119,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/coupes")
+                .url("http://192.168.1.216:5000/coupes")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -123,7 +145,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/creneau")
+                .url("http://192.168.1.216:5000/creneau")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -148,7 +170,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/creneauCoiffeur")
+                .url("http://192.168.1.216:5000/creneauCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -174,7 +196,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/coupeCoiffeur")
+                .url("http://192.168.1.216:5000/coupeCoiffeur")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -200,7 +222,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/photos")
+                .url("http://192.168.1.216:5000/photos")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -281,7 +303,7 @@ public class Api {
         String jsonBody = gson.toJson(client);
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/client") // Update if your endpoint is different
+                .url("http://192.168.1.216:5000/client") // Update if your endpoint is different
                 .post(okhttp3.RequestBody.create(jsonBody, okhttp3.MediaType.parse("application/json")))
                 .build();
 
@@ -307,7 +329,7 @@ public class Api {
         int clientId = Client.CLIENT_COURANT.getId();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/rendezvous")
+                .url("http://192.168.1.216:5000/rendezvous")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -357,7 +379,7 @@ public class Api {
         RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/rendezvous")
+                .url("http://192.168.1.216:5000/rendezvous")
                 .post(body)
                 .build();
 
@@ -374,7 +396,7 @@ public class Api {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/rendezvous/" + idRendezVous)
+                .url("http://192.168.1.216:5000/rendezvous/" + idRendezVous)
                 .delete()
                 .build();
 
@@ -406,7 +428,7 @@ public class Api {
         RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://192.168.76.55:5000/avis")
+                .url("http://192.168.1.216:5000/avis")
                 .post(body)
                 .build();
 

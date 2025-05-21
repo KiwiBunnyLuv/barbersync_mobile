@@ -24,8 +24,8 @@ public class Nouveaute extends BaseNotification {
     private int id;
     private String nom;
     private String description;
-    private String dateDebut;
-    private String dateFin;
+    private String date_debut;
+    private String date_fin;
     @SerializedName("isActive")
     private boolean isActive;
     private String type;
@@ -44,8 +44,8 @@ public class Nouveaute extends BaseNotification {
         this.id = id;
         this.nom = nom;
         this.description = description;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
+        this.date_debut = dateDebut;
+        this.date_fin = dateFin;
         this.isActive = isActive;
         this.type = type;
         setRead(isRead);
@@ -76,11 +76,11 @@ public class Nouveaute extends BaseNotification {
     }
 
     public String getDateDebut() {
-        return dateDebut;
+        return date_debut;
     }
 
     public String getDateFin() {
-        return dateFin;
+        return date_fin;
     }
 
     public boolean getIsActive() {
@@ -104,11 +104,11 @@ public class Nouveaute extends BaseNotification {
     }
 
     public void setDateDebut(String dateDebut) {
-        this.dateDebut = dateDebut;
+        this.date_debut = dateDebut;
     }
 
     public void setDateFin(String dateFin) {
-        this.dateFin = dateFin;
+        this.date_fin = dateFin;
     }
 
     public void setActive(boolean active) {

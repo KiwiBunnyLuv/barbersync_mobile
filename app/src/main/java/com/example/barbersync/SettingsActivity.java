@@ -22,7 +22,15 @@ public class SettingsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
 
-        TextView nameMessage = findViewById(R.id.welcomeMessage);
+        TextView nameMessage = findViewById(R.id.nameMessage);
+
+        // Afficher le nom de l'utilisateur connecté
+        if (Client.CLIENT_COURANT != null) {
+            nameMessage.setText("Bienvenue " + Client.CLIENT_COURANT.getName());
+        } else {
+            // Fallback au cas où l'utilisateur n'est pas connecté
+            nameMessage.setText("Bienvenue");
+        }
 
         updateNotificationBadge();
 
@@ -30,9 +38,6 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(SettingsActivity.this, NotificationActivity.class);
             startActivity(intent);
         });
-
-
-
 
         findViewById(R.id.nav_home).setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, DashBoard.class);

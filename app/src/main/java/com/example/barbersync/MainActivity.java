@@ -10,8 +10,17 @@ import android.widget.Toast;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.IOException;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,47 +54,107 @@ public class MainActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Veuillez entrer votre email et mot de passe", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        new Thread(() -> {
-            List<Client> clients = SignUpActivity.getHardcodedClients();
-            Log.d("LoginDebug", "Number of clients: " + clients.size());
-            for (Client client : clients) {
-                Log.d("LoginDebug", "Client: " + client.getEmail() + " | Phone: " + client.getPhone());
-            }
+        // Afficher une indication que la connexion est en cours
+        textResult.setText("Connexion en cours...");
 
+        new Thread(() -> {
             boolean loginSuccess = false;
             Client matchedClient = null;
+            String errorMessage = "Erreur de connexion au serveur";
 
-            for (Client client : clients) {
-                if (client.getEmail().equalsIgnoreCase(email) && client.getPhone().equals(password)) {
-                    loginSuccess = true;
-                    matchedClient = client;
-                    break;
+            try {
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
+                        .build();
+
+                // Création de l'objet JSON pour la requête
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+
+                // Log pour débogage
+                Log.d("LoginAPI", "Envoi des identifiants: " + email);
+
+                // Création du corps de la requête
+                RequestBody body = RequestBody.create(
+                        MediaType.parse("application/json"),
+                        jsonObject.toString()
+                );
+
+                // Création de la requête
+                Request request = new Request.Builder()
+                        .url("http://192.168.1.216:5000/login")
+                        .post(body)
+                        .build();
+
+                // Exécution de la requête
+                try (Response response = client.newCall(request).execute()) {
+                    String responseBody = response.body().string();
+                    Log.d("LoginAPI", "Réponse reçue: " + responseBody);
+
+                    if (response.isSuccessful()) {
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+                        loginSuccess = jsonResponse.getBoolean("success");
+
+                        if (loginSuccess) {
+                            // Extraction des données du client depuis la réponse
+                            JSONObject clientData = jsonResponse.getJSONObject("client");
+                            matchedClient = new Client(
+                                    clientData.getInt("id"),
+                                    clientData.getString("name"),
+                                    clientData.getString("email"),
+                                    clientData.getString("address"),
+                                    clientData.getString("city"),
+                                    clientData.getString("province"),
+                                    clientData.getString("postal_code"),
+                                    clientData.getString("phone")
+                            );
+                        } else if (jsonResponse.has("message")) {
+                            errorMessage = jsonResponse.getString("message");
+                        }
+                    } else {
+                        Log.e("LoginAPI", "Erreur HTTP : " + response.code());
+                        errorMessage = "Erreur serveur: " + response.code();
+                    }
                 }
+            } catch (JSONException e) {
+                Log.e("LoginAPI", "Erreur JSON : " + e.getMessage());
+                errorMessage = "Format de réponse invalide";
+            } catch (IOException e) {
+                Log.e("LoginAPI", "Erreur réseau : " + e.getMessage());
+                errorMessage = "Impossible de joindre le serveur";
             }
 
+            // Variables finales pour utilisation dans runOnUiThread
             boolean finalLoginSuccess = loginSuccess;
             Client finalClient = matchedClient;
+            String finalErrorMessage = errorMessage;
+
             runOnUiThread(() -> {
                 if (finalLoginSuccess) {
                     Client.CLIENT_COURANT = finalClient;
 
-                    textResult.setText("Welcome, " + finalClient.getName());
-                    Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    textResult.setText("Bienvenue, " + finalClient.getName());
+                    Toast.makeText(MainActivity.this, "Connexion réussie", Toast.LENGTH_SHORT).show();
+                    try {
+                        // Synchroniser les données depuis l'API
+                        sync.synchroniserDepuisApi(MainActivity.this);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
 
                     Intent intent = new Intent(MainActivity.this, DashBoard.class);
-
-                    intent.putExtra("client_name", finalClient.getName());
-                    intent.putExtra("client_email", finalClient.getEmail());
-
                     startActivity(intent);
                     finish();
                 } else {
-                    textResult.setText("Login failed");
-                    Toast.makeText(MainActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                    textResult.setText("Connexion échouée");
+                    Toast.makeText(MainActivity.this, finalErrorMessage, Toast.LENGTH_LONG).show();
                 }
             });
         }).start();

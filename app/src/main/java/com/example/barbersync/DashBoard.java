@@ -34,6 +34,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -52,6 +53,12 @@ public class DashBoard extends AppCompatActivity {
         updateNotificationBadge();
         // Planifier le Worker pour une notification quotidienne
         scheduleDailyNotification(9,25);
+        try {
+            sync.synchroniserDepuisApi(this);
+        }
+        catch (Exception e){
+            Log.e("API FAILED", "Erreur de synchronisation", e);
+        }
 
         findViewById(R.id.notification).setOnClickListener(v -> {
             Intent intent = new Intent(DashBoard.this, NotificationActivity.class);
@@ -72,9 +79,6 @@ public class DashBoard extends AppCompatActivity {
 
         Database db = new Database(this);
         nouveautes = db.getAllNouveautes();
-        //nouveautes.add(new Nouveaute(2,"Nouveau coiffeur en ville!", "Découvrez notre nouveau talent.", "12 decembre", "15 decembre", true, "rabais", false));
-        //nouveautes.add(new Nouveaute("Offre spéciale", "20% de réduction ce mois-ci.", new Date(), new Date(), true, "promo"));
-        //nouveautes.add(new Nouveaute("Offre spéciale", "20% de réduction ce mois-ci.", new Date(), new Date(), true, "promo"));
 
         adapter = new NouveauteAdapter(this, nouveautes);
         recyclerViewNouveautes.setAdapter(adapter);
@@ -84,8 +88,6 @@ public class DashBoard extends AppCompatActivity {
         recyclerViewCoiffeurs.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         List<Coiffeur> coiffeurs = db.getAllCoiffeurs();
-        //coiffeurs.add(new Coiffeur(1, "Jean Dupont", "Expert en coupes modernes."));
-        //coiffeurs.add(new Coiffeur(2, "Marie Curie", "Spécialiste des coiffures classiques."));
 
         CoiffeurAdapter coiffeurAdapter = new CoiffeurAdapter(this, coiffeurs);
         recyclerViewCoiffeurs.setAdapter(coiffeurAdapter);
