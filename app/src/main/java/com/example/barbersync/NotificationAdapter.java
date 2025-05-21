@@ -8,7 +8,8 @@
  2025-05-15     Samit Adelyar        Approuvé
  =========================================================
  Historique de modifications :
- 2025-05-20     Nicolas Beaudoin           Ajout de commentaires
+ 2025-05-20     Nicolas Beaudoin     Ajout de commentaires
+ 2025-05-21     Nicolas Beaudoin     Modification pour supporter BaseNotification
  =========================================================
  ****************************************/
 
@@ -21,18 +22,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
 /**
  * Adapter pour afficher les notifications dans un RecyclerView.
  */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
-    private final List<Notification> notifications;
+    private final List<BaseNotification> notifications;
     private final Database db;
+
     /**
      * Constructeur de l'adapter.
-     * @param notifications Liste des notifications.
+     * @param notifications Liste des notifications génériques.
      * @param db Instance de la base de données.
      */
-    public NotificationAdapter(List<Notification> notifications, Database db) {
+    public NotificationAdapter(List<BaseNotification> notifications, Database db) {
         this.notifications = notifications;
         this.db = db;
     }
@@ -46,20 +49,49 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Notification notification = notifications.get(position);
-        holder.title.setText(notification.getTitle());
-        holder.message.setText(notification.getMessage());
+        BaseNotification item = notifications.get(position);
+        holder.title.setText(item.getTitle());
+        holder.message.setText(item.getMessage());
 
-        if (notification.isRead()) {
-            holder.itemView.setAlpha(0.5f); // Indique que la notification est lue
+        // Affichage visuel selon l'état de lecture (inversé)
+        if (item.isRead()) {
+            // Notification lue : fond noir
+            ((androidx.cardview.widget.CardView) holder.itemView)
+                    .setCardBackgroundColor(android.graphics.Color.BLACK);
         } else {
-            holder.itemView.setAlpha(1.0f);
+            // Notification non lue : fond gris (plus clair)
+            ((androidx.cardview.widget.CardView) holder.itemView)
+                    .setCardBackgroundColor(android.graphics.Color.parseColor("#333333"));
         }
 
         holder.itemView.setOnClickListener(v -> {
-            notification.setRead(true);
-            db.markNotificationAsRead(notification.getId());
+            // Marquer comme lue dans l'objet
+            item.setRead(true);
+
+            // Persister le statut dans la base de données selon le type
+            if (item instanceof Notification) {
+                db.markNotificationAsRead(((Notification) item).getId());
+            } else if (item instanceof Nouveaute) {
+                db.markNouveauteAsRead(((Nouveaute) item).getId());
+            }
+
+            // Mettre à jour l'affichage
             notifyItemChanged(position);
+
+            // Ouvre l'activité de détail
+            android.content.Context context = v.getContext();
+            android.content.Intent intent = new android.content.Intent(context, NotificationDetailActivity.class);
+            intent.putExtra("title", item.getTitle());
+            intent.putExtra("message", item.getMessage());
+
+            // Ajouter des informations supplémentaires pour les nouveautés
+            if (item instanceof Nouveaute) {
+                Nouveaute nouveaute = (Nouveaute) item;
+                intent.putExtra("type", nouveaute.getType());
+                intent.putExtra("dates", "Du " + nouveaute.getDateDebut() + " au " + nouveaute.getDateFin());
+            }
+
+            context.startActivity(intent);
         });
     }
 
@@ -70,7 +102,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, message;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.notificationTitle);

@@ -29,13 +29,6 @@
             android:textSize="14sp"
             android:text=""
             android:textColor="#666666" />
-        <Button
-            android:id="@+id/btn_en_savoir_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="En savoir plus"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

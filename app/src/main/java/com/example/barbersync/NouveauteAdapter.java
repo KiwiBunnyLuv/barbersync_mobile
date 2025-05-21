@@ -54,19 +54,6 @@ public class NouveauteAdapter extends RecyclerView.Adapter<NouveauteAdapter.Nouv
         Nouveaute nouveaute = nouveautes.get(position);
         holder.titre.setText(nouveaute.getNom());
         holder.description.setText(nouveaute.getDescription());
-
-        holder.btnEnSavoirPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            Intent intent = new Intent(context, NouveauteDetailActivity.class);
-            intent.putExtra("titre", nouveaute.getNom());
-            intent.putExtra("description", nouveaute.getDescription());
-            intent.putExtra("dateDebut", nouveaute.getDateDebut().toString());
-            intent.putExtra("dateFin", nouveaute.getDateFin().toString());
-            intent.putExtra("type", nouveaute.getType());
-            context.startActivity(intent);
-        }
-        });
     }
 
     @Override
@@ -78,7 +65,6 @@ public class NouveauteAdapter extends RecyclerView.Adapter<NouveauteAdapter.Nouv
      */
     public static class NouveauteViewHolder extends RecyclerView.ViewHolder {
         TextView titre, description;
-        Button btnEnSavoirPlus;
         /**
          * Constructeur du ViewHolder.
          * @param itemView Vue de l'élément.
@@ -87,7 +73,6 @@ public class NouveauteAdapter extends RecyclerView.Adapter<NouveauteAdapter.Nouv
             super(itemView);
             titre = itemView.findViewById(R.id.titre);
             description = itemView.findViewById(R.id.description);
-            btnEnSavoirPlus = itemView.findViewById(R.id.btn_en_savoir_plus);
         }
     }
 }
