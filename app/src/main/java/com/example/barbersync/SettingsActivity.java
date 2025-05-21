@@ -21,6 +21,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextView nameMessage = findViewById(R.id.welcomeMessage);
 
+
+
+
         findViewById(R.id.nav_home).setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, DashBoard.class);
             startActivity(intent);

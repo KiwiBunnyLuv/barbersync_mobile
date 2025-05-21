@@ -49,7 +49,7 @@ public class splash extends AppCompatActivity {
             Intent intent = new Intent(splash.this, error.class);
             startActivity(intent);
         }
-        Intent intent = new Intent(splash.this, DashBoard.class);
+        Intent intent = new Intent(splash.this, MainActivity.class);
         startActivity(intent);
     }
 }

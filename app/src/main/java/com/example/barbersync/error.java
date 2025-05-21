@@ -1,3 +1,11 @@
+/****************************************
+ Fichier : error.java
+ Auteur : samit sabah adelyar
+ Fonctionnalité : aucune, c'est l'ecran de chargment du début
+ Date : 2025-05-20
+
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.os.Bundle;
@@ -24,7 +32,7 @@ public class error extends AppCompatActivity {
                 Intent intent = new Intent(error.this, splash.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish(); 
+                finish();
             }
         });
     }
