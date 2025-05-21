@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
                 android:textSize="32sp"
+                android:layout_marginLeft="20dp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
@@ -60,27 +61,33 @@
                 android:layout_height="wrap_content"
                 android:text="besoin d'une coupe ?"
                 android:textColor="#FFFFFF"
+                android:layout_marginLeft="20dp"
                 android:textSize="24sp"
                 android:layout_marginBottom="24dp" />
-
-            <!-- Nouveautés Section -->
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="nouveautés >"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/nouveautes_gradient"
-                android:textSize="20sp"
-                android:layout_marginBottom="0dp" />
+                android:orientation="vertical"
+                android:layout_height="125dp"
+                android:background="@drawable/nouveautes_gradient">
+                <!-- Nouveautés Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="nouveautés >"
+                    android:paddingLeft="20dp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/nouveautes_gradient"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="0dp" />
+                <!-- Nouveautés Cards Container -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewNouveautes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="0dp"
+                   />
+            </LinearLayout>
 
-            <!-- Nouveautés Cards Container -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewNouveautes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/nouveautes_gradient" />
 
             <!-- Nos Coiffeurs Section -->
             <TextView
@@ -88,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="nos coiffeurs >"
                 android:textColor="#FFFFFF"
+                android:paddingLeft="20dp"
                 android:textSize="20sp"
                 android:layout_marginBottom="16dp" />
 

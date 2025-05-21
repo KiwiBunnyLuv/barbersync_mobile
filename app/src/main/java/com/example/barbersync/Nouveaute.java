@@ -1,98 +1,120 @@
 /****************************************
- Fichier : Nouveaute.java
- Auteur : Nicolas Beaudoin
- Fonctionnalité : Représente une nouveauté dans l'application
- Date : 2025-05-07
-
- Vérification :
- 2025-05-20     Yassine Abide        Approuvé
- =========================================================
- Historique de modifications :
- 2025-05-20     Nicolas Beaudoin           Ajout de commentaires et javadoc
- =========================================================
+ * Fichier : Nouveaute.java
+ * Auteur : Nicolas Beaudoin
+ * Fonctionnalité : Représente une nouveauté dans l'application
+ * Date : 2025-05-19
+ *
+ * Vérification :
+ * 2025-05-20     Yassine Abide        Approuvé
+ * =========================================================
+ * Historique de modifications :
+ * 2025-05-20     Nicolas Beaudoin           Ajout de commentaires
+ * =========================================================
  ****************************************/
 
 package com.example.barbersync;
-import java.util.Date;
+
+import com.google.gson.annotations.SerializedName;
+
 /**
- * Classe représentant une nouveauté avec ses informations principales.
+ * Classe représentant une nouveauté dans l'application qui étend BaseNotification.
  */
-public class Nouveaute {
-    private int id_nouveaute;
+public class Nouveaute extends BaseNotification {
+    @SerializedName("id_nouveaute")
+    private int id;
     private String nom;
     private String description;
-    private String date_debut;
-    private String date_fin;
-    private Boolean isActive;
+    private String dateDebut;
+    private String dateFin;
+    @SerializedName("isActive")
+    private boolean isActive;
     private String type;
+
     /**
-     * Constructeur complet.
-     * @param id_nouveaute Identifiant de la nouveauté.
-     * @param nom Nom de la nouveauté.
+     * Constructeur de la classe Nouveaute.
+     * @param id Identifiant de la nouveauté.
+     * @param nom Titre de la nouveauté.
      * @param description Description de la nouveauté.
      * @param dateDebut Date de début de la nouveauté.
      * @param dateFin Date de fin de la nouveauté.
-     * @param isActive Statut actif ou non de la nouveauté.
-     * @param type Type de la nouveauté.
+     * @param isActive État d'activation de la nouveauté.
+     * @param type Type de nouveauté.
      */
-    public Nouveaute(int id_nouveaute,String nom, String description, String dateDebut, String dateFin, Boolean isActive, String type) {
-        this.id_nouveaute = id_nouveaute;
+    public Nouveaute(int id, String nom, String description, String dateDebut, String dateFin, boolean isActive, String type, boolean isRead) {
+        this.id = id;
         this.nom = nom;
         this.description = description;
-        this.date_debut = dateDebut;
-        this.date_fin = dateFin;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
         this.isActive = isActive;
         this.type = type;
+        setRead(isRead);
+
     }
-    /** @return l'identifiant de la nouveauté */
-    public String getId() {
-        return String.valueOf(this.id_nouveaute);
+    // Implémentation des méthodes abstraites de BaseNotification
+    @Override
+    public String getTitle() {
+        return nom;
     }
-    /** @return le nom de la nouveauté */
+
+    @Override
+    public String getMessage() {
+        return description;
+    }
+
+    // Getters pour les autres propriétés
+    public int getId() {
+        return id;
+    }
+
     public String getNom() {
         return nom;
     }
-    /** @param nom le nom à définir */
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-    /** @return la description de la nouveauté */
+
     public String getDescription() {
         return description;
     }
-    /** @param description la description à définir */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    /** @return la date de début de la nouveauté */
+
     public String getDateDebut() {
-        return date_debut;
+        return dateDebut;
     }
-    /** @param dateDebut la date de début à définir */
-    public void setDateDebut(String dateDebut) {
-        this.date_debut = dateDebut;
-    }
-    /** @return la date de fin de la nouveauté */
+
     public String getDateFin() {
-        return date_fin;
+        return dateFin;
     }
-    /** @param dateFin la date de fin à définir */
-    public void setDateFin(String dateFin) {
-        this.date_fin = dateFin;
-    }
-    /** @return le statut actif ou non de la nouveauté */
-    public Boolean getIsActive() {
+
+    public boolean getIsActive() {
         return isActive;
     }
-    /** @param isActive le statut actif à définir */
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-    /** @return le type de la nouveauté */
+
     public String getType() {
         return type;
     }
-    /** @param type le type à définir */
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDateDebut(String dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public void setDateFin(String dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public void setType(String type) {
         this.type = type;
     }

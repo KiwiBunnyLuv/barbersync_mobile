@@ -86,7 +86,8 @@ public class Database extends SQLiteOpenHelper {
                 "date_debut TEXT, " +
                 "date_fin TEXT, " +
                 "is_active BOOLEAN, " +
-                "type TEXT)");
+                "type TEXT, " +
+                "is_read INTEGER DEFAULT 0)");
 
         // Table photos
         db.execSQL("CREATE TABLE photos (" +
@@ -113,6 +114,7 @@ public class Database extends SQLiteOpenHelper {
                 "title TEXT, " +
                 "message TEXT, " +
                 "is_read INTEGER DEFAULT 0)");
+
     }
 
     @Override
@@ -266,14 +268,31 @@ public class Database extends SQLiteOpenHelper {
     }
     public void insertNouveaute(Nouveaute n) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // Vérifier si la nouveauté existe déjà et récupérer son état de lecture
+        boolean isAlreadyRead = false;
+        Cursor cursor = db.rawQuery(
+                "SELECT is_read FROM nouveautes WHERE id = ?",
+                new String[]{String.valueOf(n.getId())}
+        );
+
+        if (cursor.moveToFirst()) {
+            isAlreadyRead = cursor.getInt(cursor.getColumnIndexOrThrow("is_read")) == 1;
+        }
+        cursor.close();
+
         ContentValues values = new ContentValues();
         values.put("id", n.getId());
         values.put("nom", n.getNom());
         values.put("description", n.getDescription());
-        values.put("date_debut", n.getDateDebut().toString());
-        values.put("date_fin", n.getDateFin().toString());
+        values.put("date_debut", n.getDateDebut());
+        values.put("date_fin", n.getDateFin());
         values.put("is_active", n.getIsActive());
         values.put("type", n.getType());
+
+        // Utiliser l'état de lecture existant s'il existe, sinon utiliser celui par défaut
+        values.put("is_read", isAlreadyRead ? 1 : 0);
+
         db.insertWithOnConflict("nouveautes", null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
@@ -291,13 +310,20 @@ public class Database extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow("date_debut")),
                         cursor.getString(cursor.getColumnIndexOrThrow("date_fin")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("is_active")) == 1,
-                        cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                        cursor.getString(cursor.getColumnIndexOrThrow("type")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("is_read")) == 1
                 );
                 nouveautes.add(nouveaute);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return nouveautes;
+    }
+    public void markNouveauteAsRead(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_read", 1);
+        db.update("nouveautes", values, "id = ?", new String[]{String.valueOf(id)});
     }
     public void insertNotification(Notification notification) {
         SQLiteDatabase db = this.getWritableDatabase();

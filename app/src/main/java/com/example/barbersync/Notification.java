@@ -17,11 +17,10 @@ package com.example.barbersync;
 /**
  * Classe représentant une notification avec un titre, un message et un état de lecture.
  */
-public class Notification {
+public class Notification extends BaseNotification {
     private int id;
     private String title;
     private String message;
-    private boolean isRead;
     /**
      * Constructeur de la classe Notification.
      * @param id Identifiant de la notification.
@@ -33,13 +32,11 @@ public class Notification {
         this.id = id;
         this.title = title;
         this.message = message;
-        this.isRead = isRead;
+        setRead(isRead);
     }
 
     // Getters et setters
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getMessage() { return message; }
-    public boolean isRead() { return isRead; }
-    public void setRead(boolean read) { isRead = read; }
 }
