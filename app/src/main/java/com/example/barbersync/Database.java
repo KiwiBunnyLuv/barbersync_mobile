@@ -32,7 +32,7 @@ import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
     private static final String DB_NAME = "barbersync.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public Database(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

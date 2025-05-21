@@ -1,3 +1,17 @@
+/****************************************
+ Fichier : ConfirmationRendezVousActivity.java
+ Auteur : Ramin Amiri
+ Fonctionnalité : MOBCONFIRM - Permet de confirmer les détails d'un rendez-vous avant de le réserver
+ Date : 2025-05-21
+
+ Vérification :
+ 2025-05-22     Samit Adelyar        Approuvé
+ =========================================================
+ Historique de modifications :
+ 2025-05-22     Ramin Amiri           Ajout de valeurs hardcodées pour la démo
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Intent;
@@ -21,6 +35,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Activité qui permet de confirmer les détails d'un rendez-vous avant de le réserver
+ */
 public class ConfirmationRendezVousActivity extends AppCompatActivity {
 
     private ImageButton btnRetour;
@@ -29,8 +46,8 @@ public class ConfirmationRendezVousActivity extends AppCompatActivity {
     private TextView tvPrix, tvDate, tvHeure, tvCoiffeur, tvLieu;
 
     private Coiffeur coiffeur;
-    private Creneau creneau;
-    private List<CoupeCoiffeur> coupes = new ArrayList<>();
+    private String dateRendezVous;
+    private String heureRendezVous;
     private Map<String, Double> servicesPrix = new HashMap<>();
     private String serviceSelectionne;
     private double prixSelectionne;
@@ -42,12 +59,20 @@ public class ConfirmationRendezVousActivity extends AppCompatActivity {
 
         // Récupérer les données passées
         coiffeur = (Coiffeur) getIntent().getSerializableExtra("coiffeur");
-        creneau = (Creneau) getIntent().getSerializableExtra("creneau");
+        dateRendezVous = getIntent().getStringExtra("date");
+        heureRendezVous = getIntent().getStringExtra("heure");
 
-        if (coiffeur == null || creneau == null) {
-            Toast.makeText(this, "Erreur: données manquantes", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+        // Si les données sont nulles, utiliser des valeurs par défaut pour la démo
+        if (coiffeur == null) {
+            coiffeur = new Coiffeur(1, "Jack Nack", "Expert en coupes modernes.");
+        }
+
+        if (dateRendezVous == null) {
+            dateRendezVous = "2025-04-03";
+        }
+
+        if (heureRendezVous == null) {
+            heureRendezVous = "09:30";
         }
 
         initialiserVues();
@@ -57,6 +82,9 @@ public class ConfirmationRendezVousActivity extends AppCompatActivity {
         chargerServicesCoiffeur();
     }
 
+    /**
+     * Initialise les vues de l'activité
+     */
     private void initialiserVues() {
         btnRetour = findViewById(R.id.btnRetour);
         btnReserver = findViewById(R.id.btnReserver);
@@ -71,72 +99,44 @@ public class ConfirmationRendezVousActivity extends AppCompatActivity {
         tvCoiffeur.setText(coiffeur.getName());
         tvLieu.setText("salon Bald Barbers"); // Hardcoded pour simplifier
 
-        // Formater la date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat affichageFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRENCH);
-        try {
-            Date date = dateFormat.parse(creneau.getDate());
-            tvDate.setText(affichageFormat.format(date));
-        } catch (Exception e) {
-            tvDate.setText(creneau.getDate());
-        }
-
-        tvHeure.setText(creneau.getHeureDebut());
+        // Formater la date pour l'affichage
+        tvDate.setText(dateRendezVous);
+        tvHeure.setText(heureRendezVous);
 
         // Configurer le bouton de réservation
         btnReserver.setOnClickListener(v -> confirmerReservation());
     }
 
+    /**
+     * Configure le bouton de retour
+     */
     private void configurerBoutonRetour() {
         btnRetour.setOnClickListener(v -> finish());
     }
 
+    /**
+     * Charge les services du coiffeur (données hardcodées pour démo)
+     */
     private void chargerServicesCoiffeur() {
-        // Afficher un indicateur de chargement
-        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        // Données hardcodées pour la démo
+        servicesPrix.put("coupe régulière", 15.00);
+        servicesPrix.put("coupe + barbe", 25.00);
+        servicesPrix.put("coupe enfant", 10.00);
+        servicesPrix.put("rasage", 12.00);
 
-        new Thread(() -> {
-            Api api = new Api();
-            List<CoupeCoiffeur> coupesPrix = api.getCoupeCoiffeurs();
-            List<Coupes> toutesCoupes = api.getCoupes();
-
-            if (coupesPrix != null && toutesCoupes != null) {
-                // Filtrer les coupes pour ce coiffeur et créer la map de prix
-                for (CoupeCoiffeur cc : coupesPrix) {
-                    if (cc.getCoiffeur() == coiffeur.getId() && cc.getPrix() > 0) {
-                        for (Coupes c : toutesCoupes) {
-                            if (c.getId() == cc.getCoupe()) {
-                                servicesPrix.put(c.getNom(), cc.getPrix());
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                runOnUiThread(() -> {
-                    configurerSpinnerServices();
-                    findViewById(R.id.progressBar).setVisibility(View.GONE);
-                });
-            } else {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "Erreur lors du chargement des services", Toast.LENGTH_SHORT).show();
-                    findViewById(R.id.progressBar).setVisibility(View.GONE);
-                });
-            }
-        }).start();
+        // Configurer le spinner
+        configurerSpinnerServices();
     }
 
+    /**
+     * Configure le spinner des services
+     */
     private void configurerSpinnerServices() {
         // Créer la liste des services pour le spinner
         final List<String> listeServices = new ArrayList<>(servicesPrix.keySet());
 
-        if (listeServices.isEmpty()) {
-            Toast.makeText(this, "Aucun service disponible pour ce coiffeur", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listeServices);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, listeServices);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerService.setAdapter(adapter);
 
@@ -163,39 +163,13 @@ public class ConfirmationRendezVousActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Confirme la réservation et passe à l'écran suivant
+     */
     private void confirmerReservation() {
-        // Vérifier que tout est bien sélectionné
-        if (serviceSelectionne == null) {
-            Toast.makeText(this, "Veuillez sélectionner un service", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Afficher un indicateur de chargement
-        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        btnReserver.setEnabled(false);
-
-        new Thread(() -> {
-            Api api = new Api();
-            boolean success = api.creerRendezVous(
-                    creneau.getId(),
-                    Client.CLIENT_COURANT.getId(), // Utiliser l'ID du client connecté
-                    serviceSelectionne,
-                    prixSelectionne,
-                    coiffeur.getId()
-            );
-
-            runOnUiThread(() -> {
-                findViewById(R.id.progressBar).setVisibility(View.GONE);
-                if (success) {
-                    // Naviguer vers la page de confirmation
-                    Intent intent = new Intent(this, ReservationCompleteActivity.class);
-                    startActivity(intent);
-                    finish(); // Fermer cette activité
-                } else {
-                    Toast.makeText(this, "Erreur lors de la réservation", Toast.LENGTH_SHORT).show();
-                    btnReserver.setEnabled(true);
-                }
-            });
-        }).start();
+        // Pour la démo, on passe directement à l'écran de confirmation
+        Intent intent = new Intent(this, ReservationCompleteActivity.class);
+        startActivity(intent);
+        finish(); // Fermer cette activité
     }
 }

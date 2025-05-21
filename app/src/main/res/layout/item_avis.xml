@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="#222222"
+    android:layout_marginBottom="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Image de la coupe de cheveux -->
+        <ImageView
+            android:id="@+id/imgCoupe"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/scissors"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Nom d'utilisateur -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="user123"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Étoiles de notation -->
+        <LinearLayout
+            android:id="@+id/etoilesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp">
+            <!-- Les étoiles seront ajoutées ici dynamiquement -->
+        </LinearLayout>
+
+        <!-- Commentaire -->
+        <TextView
+            android:id="@+id/tvCommentaire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Super coupe! Prix raisonnable, je vais y revenir c'est sûr!"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
