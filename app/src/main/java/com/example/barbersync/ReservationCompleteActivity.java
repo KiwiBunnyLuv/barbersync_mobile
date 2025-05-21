@@ -1,3 +1,16 @@
+/****************************************
+ Fichier : ReservationCompleteActivity.java
+ Auteur : Ramin Amiri
+ Fonctionnalité : MOBFINAL - Affiche la confirmation finale de la réservation
+ Date : 2025-05-21
+
+ Vérification :
+ 2025-05-22     Samit Adelyar        Approuvé
+ =========================================================
+ Historique de modifications :
+ =========================================================
+ ****************************************/
+
 package com.example.barbersync;
 
 import android.content.Intent;
@@ -6,6 +19,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Activité qui affiche la confirmation finale de la réservation
+ */
 public class ReservationCompleteActivity extends AppCompatActivity {
 
     private Button btnTerminer;

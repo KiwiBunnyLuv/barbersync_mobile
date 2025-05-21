@@ -125,14 +125,14 @@ public class coiffeurDetailActivity extends AppCompatActivity {
 
     // appelle les reviews
     private void consultReviews(Coiffeur coiffeur, Context context) {
-        Intent intent = new Intent(context, coiffeurDetailActivity.class);
+        Intent intent = new Intent(context, AvisCoiffeurActivity.class);
         intent.putExtra("coiffeur", coiffeur);
         context.startActivity(intent);
     }
 
     // appelle l'activity qui met les rendez-vous
     private void takeAppointment(Coiffeur coiffeur, Context context) {
-        Intent intent = new Intent(context, coiffeurDetailActivity.class);
+        Intent intent = new Intent(context, AjoutRendezVousActivity.class);
         intent.putExtra("coiffeur", coiffeur);
         context.startActivity(intent);
     }

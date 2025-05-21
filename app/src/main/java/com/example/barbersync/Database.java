@@ -141,7 +141,6 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public void insertCoupe(Coupes c) {
-        Log.d("coupe", "coupe : " + c.getNom());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("id", c.getId());

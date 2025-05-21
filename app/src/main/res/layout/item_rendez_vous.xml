@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
+        <!-- Image du coiffeur -->
         <ImageView
             android:id="@+id/imageCoiffeur"
             android:layout_width="60dp"
@@ -22,6 +23,7 @@
             android:background="#444444"
             android:padding="8dp" />
 
+        <!-- Informations du rendez-vous -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -57,6 +59,7 @@
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
+        <!-- Bouton d'action (annuler ou mettre un avis) -->
         <Button
             android:id="@+id/btnAction"
             android:layout_width="wrap_content"
