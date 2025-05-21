@@ -2,6 +2,7 @@ package com.example.barbersync;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -20,6 +23,13 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         TextView nameMessage = findViewById(R.id.welcomeMessage);
+
+        updateNotificationBadge();
+
+        findViewById(R.id.notification).setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
 
 
 
@@ -68,5 +78,35 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(SettingsActivity.this, ListeCoiffeursActivity.class);
             startActivity(intent);
         });
+    }
+    private void updateNotificationBadge() {
+        TextView badgeView = findViewById(R.id.notification_badge);
+        if (badgeView != null) {
+            // Obtenir le nombre de notifications non lues
+            Database db = new Database(this);
+            List<Notification> notifications = db.getAllNotifications();
+            List<Nouveaute> nouveautes = db.getAllNouveautes();
+            int unreadCount = 0;
+
+            for (Notification notification : notifications) {
+                if (!notification.isRead()) {
+                    unreadCount++;
+                }
+            }
+
+            for (Nouveaute nouveaute : nouveautes) {
+                if (!nouveaute.isRead()) {
+                    unreadCount++;
+                }
+            }
+
+            // Mettre à jour le badge
+            if (unreadCount > 0) {
+                badgeView.setVisibility(View.VISIBLE);
+                badgeView.setText(String.valueOf(unreadCount));
+            } else {
+                badgeView.setVisibility(View.GONE);
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ public class DashBoard extends AppCompatActivity {
         checkNotificationPermission();
         updateNotificationBadge();
         // Planifier le Worker pour une notification quotidienne
-        scheduleDailyNotification(9,0);
+        scheduleDailyNotification(9,25);
 
         findViewById(R.id.notification).setOnClickListener(v -> {
             Intent intent = new Intent(DashBoard.this, NotificationActivity.class);
@@ -72,7 +72,7 @@ public class DashBoard extends AppCompatActivity {
 
         Database db = new Database(this);
         nouveautes = db.getAllNouveautes();
-        //nouveautes.add(new Nouveaute("Nouveau coiffeur en ville!", "Découvrez notre nouveau talent.", new Date(), new Date(), true, "rabais"));
+        //nouveautes.add(new Nouveaute(2,"Nouveau coiffeur en ville!", "Découvrez notre nouveau talent.", "12 decembre", "15 decembre", true, "rabais", false));
         //nouveautes.add(new Nouveaute("Offre spéciale", "20% de réduction ce mois-ci.", new Date(), new Date(), true, "promo"));
         //nouveautes.add(new Nouveaute("Offre spéciale", "20% de réduction ce mois-ci.", new Date(), new Date(), true, "promo"));
 

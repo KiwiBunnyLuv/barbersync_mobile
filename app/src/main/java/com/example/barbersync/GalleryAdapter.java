@@ -57,7 +57,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
 
         //construire url
-        String baseUrl = "http://192.168.11.212:5000/galeries/";
+        String baseUrl = "http://192.168.76.55:5000/galeries/";
         String encodedName = android.net.Uri.encode(coiffeur.getName());
         String encodedFileName = android.net.Uri.encode(coiffeur.getPhotos().get(position).getNomFichierImage());
         String fullUrl = baseUrl + encodedName + "/" + encodedFileName;

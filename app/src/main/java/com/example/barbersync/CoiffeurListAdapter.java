@@ -88,7 +88,7 @@ public class CoiffeurListAdapter extends RecyclerView.Adapter<CoiffeurListAdapte
                 Log.d(TAG, "Nom du fichier image: " + nomFichier);
 
                 // Construction de l'URL en encodant les parties
-                String baseUrl = "http://192.168.11.212:5000/galeries/";
+                String baseUrl = "http://192.168.76.55:5000/galeries/";
                 String encodedName = android.net.Uri.encode(coiffeur.getName());
                 String encodedFileName = android.net.Uri.encode(nomFichier);
                 String fullUrl = baseUrl + encodedName + "/" + encodedFileName;

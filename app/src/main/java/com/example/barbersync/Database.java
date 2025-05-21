@@ -299,6 +299,7 @@ public class Database extends SQLiteOpenHelper {
         List<Nouveaute> nouveautes = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM nouveautes", null);
+        nouveautes.add(new Nouveaute(2,"Nouveau coiffeur en ville!", "Découvrez notre nouveau talent.", "12 decembre", "15 decembre", true, "rabais", false));
 
         if (cursor.moveToFirst()) {
             do {
