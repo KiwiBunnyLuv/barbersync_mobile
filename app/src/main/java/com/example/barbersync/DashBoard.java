@@ -34,6 +34,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
+import android.view.View;
 import android.widget.TextView;
 
 public class DashBoard extends AppCompatActivity {
@@ -48,6 +49,7 @@ public class DashBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
         checkNotificationPermission();
+        updateNotificationBadge();
         // Planifier le Worker pour une notification quotidienne
         scheduleDailyNotification(9,0);
 
@@ -135,4 +137,36 @@ public class DashBoard extends AppCompatActivity {
                 notificationWork
         );
     }
+    private void updateNotificationBadge() {
+        TextView badgeView = findViewById(R.id.notification_badge);
+        if (badgeView != null) {
+            // Obtenir le nombre de notifications non lues
+            Database db = new Database(this);
+            List<Notification> notifications = db.getAllNotifications();
+            List<Nouveaute> nouveautes = db.getAllNouveautes();
+            int unreadCount = 0;
+
+            for (Notification notification : notifications) {
+                if (!notification.isRead()) {
+                    unreadCount++;
+                }
+            }
+
+            for (Nouveaute nouveaute : nouveautes) {
+                if (!nouveaute.isRead()) {
+                    unreadCount++;
+                }
+            }
+
+            // Mettre à jour le badge
+            if (unreadCount > 0) {
+                badgeView.setVisibility(View.VISIBLE);
+                badgeView.setText(String.valueOf(unreadCount));
+            } else {
+                badgeView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
 }
