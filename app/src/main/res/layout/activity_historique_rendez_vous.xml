@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/headerLayout"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,11 +52,22 @@
                 android:id="@+id/tvTitreProchain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Votre prochain rendez-vous"
+                android:text="Vos prochains rendez-vous"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
+
+            <!-- Message quand aucun rendez-vous à venir -->
+            <TextView
+                android:id="@+id/tvAucunProchain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vous n'avez pas de rendez-vous à venir"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewProchains"
@@ -74,6 +85,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
+
+            <!-- Message quand aucun ancien rendez-vous -->
+            <TextView
+                android:id="@+id/tvAucunAncien"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vous n'avez pas d'anciens rendez-vous"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewAnciens"

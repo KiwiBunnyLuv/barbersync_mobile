@@ -36,21 +36,49 @@
     </RelativeLayout>
 
     <!-- Contenu principal - Liste d'avis -->
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAvis"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/headerLayout"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar">
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/containerAvis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-            <!-- Les avis seront ajoutés ici dynamiquement -->
-        </LinearLayout>
-    </ScrollView>
+    <!-- Message "Aucun avis" -->
+    <TextView
+        android:id="@+id/tvAucunAvis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aucun avis pour ce coiffeur pour le moment"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        android:visibility="gone" />
+
+    <!-- Indicateur de chargement -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Conteneur pour les avis ajoutés dynamiquement (optionnel) -->
+    <LinearLayout
+        android:id="@+id/containerAvis"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        android:visibility="gone" />
 
     <!-- Barre de navigation inférieure -->
     <include

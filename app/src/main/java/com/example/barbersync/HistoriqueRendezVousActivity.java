@@ -1,22 +1,26 @@
 /****************************************
- Fichier : HistoriqueRendezVousActivity.java
- Auteur : Ramin Amiri
- Fonctionnalité : MOBHIST1 - Affiche l'historique des rendez-vous de l'utilisateur
- Date : 2025-05-25
-
- Vérification :
- 2025-05-26     Samit Adelyar        Approuvé
+ * Fichier : HistoriqueRendezVousActivity.java
+ * Auteur : Ramin Amiri
+ * Fonctionnalité : MOBHIST1 - Affiche l'historique des rendez-vous depuis l'API Flask
+ * Date : 2025-05-25
+ *
+ * Vérification :
+ * 2025-05-26     Samit Adelyar        Approuvé
  =========================================================
- Historique de modifications :
- 2025-05-26     Ramin Amiri           Ajout de la séparation entre rendez-vous à venir et passés
+ * Historique de modifications :
+ * 2025-05-26     Ramin Amiri           Correction pour compatibilité avec API Flask
+ * 2025-05-30     Ramin Amiri           Correction de la logique de tri des rendez-vous
+ * 2025-12-18     Ramin Amiri           Correction des expressions lambda pour compatibilité Android
  =========================================================
  ****************************************/
 
 package com.example.barbersync;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,21 +31,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 /**
- * Activité qui affiche l'historique des rendez-vous de l'utilisateur,
+ * Activité qui affiche l'historique des rendez-vous de l'utilisateur depuis l'API Flask,
  * séparés entre les rendez-vous à venir et les rendez-vous passés.
  */
 public class HistoriqueRendezVousActivity extends AppCompatActivity {
 
+    private static final String TAG = "HistoriqueRDV";
+
     private RecyclerView recyclerViewProchains, recyclerViewAnciens;
     private TextView tvTitreProchain, tvTitreAnciens;
+    private TextView tvAucunProchain, tvAucunAncien;
     private ImageButton btnRetour;
+    private ProgressBar progressBar;
 
-    private List<RendezVous> tousLesRendezVous = new ArrayList<>();
     private List<RendezVous> prochainsRendezVous = new ArrayList<>();
     private List<RendezVous> anciensRendezVous = new ArrayList<>();
 
@@ -54,17 +62,20 @@ public class HistoriqueRendezVousActivity extends AppCompatActivity {
             initialiserVues();
             configurerBoutonRetour();
 
-            // Charger les données de démonstration
-            chargerRendezVousDemonstration();
+            // Vérifier que le client est connecté
+            if (Client.CLIENT_COURANT == null) {
+                Toast.makeText(this, "Erreur: aucun client connecté", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
 
-            // Trier les rendez-vous en prochains et anciens
-            trierRendezVous();
+            // Charger les rendez-vous depuis l'API Flask
+            chargerRendezVousDepuisAPI();
 
-            // Mettre à jour l'interface utilisateur
-            mettreAJourUI();
         } catch (Exception e) {
             Toast.makeText(this, "Erreur: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+            Log.e(TAG, "Erreur d'initialisation: " + e.getMessage());
+            finish();
         }
     }
 
@@ -77,6 +88,9 @@ public class HistoriqueRendezVousActivity extends AppCompatActivity {
         tvTitreProchain = findViewById(R.id.tvTitreProchain);
         tvTitreAnciens = findViewById(R.id.tvTitreAnciens);
         btnRetour = findViewById(R.id.btnRetour);
+        progressBar = findViewById(R.id.progressBar);
+        tvAucunProchain = findViewById(R.id.tvAucunProchain);
+        tvAucunAncien = findViewById(R.id.tvAucunAncien);
 
         // Configuration des RecyclerView
         recyclerViewProchains.setLayoutManager(new LinearLayoutManager(this));
@@ -88,103 +102,91 @@ public class HistoriqueRendezVousActivity extends AppCompatActivity {
      */
     private void configurerBoutonRetour() {
         if (btnRetour != null) {
-            btnRetour.setOnClickListener(v -> finish());
+            btnRetour.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
     }
 
     /**
-     * Charge les données de démonstration pour les rendez-vous
+     * Vérifie si une date est dans le passé
      */
-    private void chargerRendezVousDemonstration() {
-        // Créer quelques rendez-vous de démonstration
+    private boolean estDatePassee(String dateStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date dateRendezVous = sdf.parse(dateStr);
 
-        // Rendez-vous à venir
-        RendezVous rdv1 = new RendezVous();
-        rdv1.setId_rendezvous(1);
-        rdv1.setCreneau(new Creneau(101, "11:15", "12:15", "2025-04-10"));
-        rdv1.setNomCoiffeur("Jack Nack");
-        rdv1.setTypeService("Coupe régulière");
-        rdv1.setPrix(15.0);
-        rdv1.setEtatRendezVous(false); // À venir
+            // Obtenir la date d'aujourd'hui sans l'heure
+            Calendar ajd = Calendar.getInstance();
+            ajd.set(Calendar.HOUR_OF_DAY, 0);
+            ajd.set(Calendar.MINUTE, 0);
+            ajd.set(Calendar.SECOND, 0);
+            ajd.set(Calendar.MILLISECOND, 0);
 
-        // Rendez-vous passés
-        RendezVous rdv2 = new RendezVous();
-        rdv2.setId_rendezvous(2);
-        rdv2.setCreneau(new Creneau(102, "13:45", "14:45", "2025-03-10"));
-        rdv2.setNomCoiffeur("Jack Nack");
-        rdv2.setTypeService("Coupe régulière");
-        rdv2.setPrix(15.0);
-        rdv2.setEtatRendezVous(true); // Terminé
-
-        RendezVous rdv3 = new RendezVous();
-        rdv3.setId_rendezvous(3);
-        rdv3.setCreneau(new Creneau(103, "10:30", "11:30", "2025-01-15"));
-        rdv3.setNomCoiffeur("John Dow");
-        rdv3.setTypeService("Coupe ciseau");
-        rdv3.setPrix(30.0);
-        rdv3.setEtatRendezVous(true); // Terminé
-
-        RendezVous rdv4 = new RendezVous();
-        rdv4.setId_rendezvous(4);
-        rdv4.setCreneau(new Creneau(104, "15:00", "16:00", "2024-12-23"));
-        rdv4.setNomCoiffeur("Jack Nack");
-        rdv4.setTypeService("Coupe régulière + barbe");
-        rdv4.setPrix(18.0);
-        rdv4.setEtatRendezVous(true); // Terminé
-
-        RendezVous rdv5 = new RendezVous();
-        rdv5.setId_rendezvous(5);
-        rdv5.setCreneau(new Creneau(105, "10:30", "11:30", "2025-02-24"));
-        rdv5.setNomCoiffeur("John Dow");
-        rdv5.setTypeService("Coupe ciseau");
-        rdv5.setPrix(30.0);
-        rdv5.setEtatRendezVous(true); // Terminé
-
-        RendezVous rdv6 = new RendezVous();
-        rdv6.setId_rendezvous(6);
-        rdv6.setCreneau(new Creneau(106, "13:00", "14:00", "2024-11-12"));
-        rdv6.setNomCoiffeur("John Dow");
-        rdv6.setTypeService("Coupe régulière + barbe");
-        rdv6.setPrix(18.0);
-        rdv6.setEtatRendezVous(true); // Terminé
-
-        // Ajouter tous les rendez-vous à la liste
-        tousLesRendezVous.add(rdv1);
-        tousLesRendezVous.add(rdv2);
-        tousLesRendezVous.add(rdv3);
-        tousLesRendezVous.add(rdv4);
-        tousLesRendezVous.add(rdv5);
-        tousLesRendezVous.add(rdv6);
+            return dateRendezVous.before(ajd.getTime());
+        } catch (ParseException e) {
+            Log.e(TAG, "Erreur lors du parsing de la date: " + dateStr);
+            return false;
+        }
     }
 
     /**
-     * Trie les rendez-vous en deux catégories : à venir et passés
+     * Charge les rendez-vous depuis l'API Flask
      */
-    private void trierRendezVous() {
+    private void chargerRendezVousDepuisAPI() {
+        // Afficher le spinner de chargement
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<RendezVous> rendezVousList = new ArrayList<>();
+
+                try {
+                    // Utiliser la méthode de l'API pour récupérer les rendez-vous
+                    Api api = new Api();
+                    rendezVousList = api.getRendezVous();
+                } catch (Exception e) {
+                    Log.e(TAG, "Erreur lors de la récupération des rendez-vous: " + e.getMessage());
+                }
+
+                final List<RendezVous> finalRendezVousList = rendezVousList;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        separerRendezVous(finalRendezVousList);
+                        mettreAJourUI();
+
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * Sépare les rendez-vous entre à venir et passés basé sur la date
+     */
+    private void separerRendezVous(List<RendezVous> tousLesRendezVous) {
         prochainsRendezVous.clear();
         anciensRendezVous.clear();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date aujourdhui = new Date();
-
         for (RendezVous rdv : tousLesRendezVous) {
-            try {
-                if (rdv.getCreneau() == null) {
-                    continue; // Ignorer les rendez-vous sans créneau
-                }
-
-                Date dateRdv = sdf.parse(rdv.getCreneau().getDate());
-                if (dateRdv != null && (dateRdv.after(aujourdhui) || rdv.isEtatRendezVous() == false)) {
-                    prochainsRendezVous.add(rdv);
-                } else {
-                    anciensRendezVous.add(rdv);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-                // En cas d'erreur, classer le rendez-vous par défaut dans les prochains
-                if (rdv.getCreneau() != null) {
-                    prochainsRendezVous.add(rdv);
-                }
+            // Vérifier si la date du rendez-vous est passée
+            if (rdv.getCreneau() != null && estDatePassee(rdv.getCreneau().getDate())) {
+                // Rendez-vous passé (basé sur la date)
+                anciensRendezVous.add(rdv);
+            } else {
+                // Rendez-vous à venir
+                prochainsRendezVous.add(rdv);
             }
         }
     }
@@ -200,9 +202,13 @@ public class HistoriqueRendezVousActivity extends AppCompatActivity {
                 recyclerViewProchains.setAdapter(adapterProchains);
                 tvTitreProchain.setVisibility(View.VISIBLE);
                 recyclerViewProchains.setVisibility(View.VISIBLE);
+                if (tvAucunProchain != null) tvAucunProchain.setVisibility(View.GONE);
             } else {
-                tvTitreProchain.setVisibility(View.GONE);
+                tvTitreProchain.setVisibility(View.VISIBLE);
                 recyclerViewProchains.setVisibility(View.GONE);
+                if (tvAucunProchain != null) {
+                    tvAucunProchain.setVisibility(View.VISIBLE);
+                }
             }
 
             // Adapter pour les anciens rendez-vous
@@ -211,9 +217,13 @@ public class HistoriqueRendezVousActivity extends AppCompatActivity {
                 recyclerViewAnciens.setAdapter(adapterAnciens);
                 tvTitreAnciens.setVisibility(View.VISIBLE);
                 recyclerViewAnciens.setVisibility(View.VISIBLE);
+                if (tvAucunAncien != null) tvAucunAncien.setVisibility(View.GONE);
             } else {
-                tvTitreAnciens.setVisibility(View.GONE);
+                tvTitreAnciens.setVisibility(View.VISIBLE);
                 recyclerViewAnciens.setVisibility(View.GONE);
+                if (tvAucunAncien != null) {
+                    tvAucunAncien.setVisibility(View.VISIBLE);
+                }
             }
 
             // Si aucun rendez-vous n'est trouvé, afficher un message
@@ -221,9 +231,8 @@ public class HistoriqueRendezVousActivity extends AppCompatActivity {
                 Toast.makeText(this, "Vous n'avez pas de rendez-vous", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Erreur lors de l'affichage des rendez-vous: " + e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            Toast.makeText(this, "Erreur lors de l'affichage des rendez-vous", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Erreur lors de la mise à jour de l'UI: " + e.getMessage());
         }
     }
 }

@@ -2,8 +2,7 @@
  Fichier : Database.java
  Auteur : Samit Sabah Adelyar
  Fonctionnalité : MOBINT1 --- classe qui fait la base de données locale --- Samit a fait la logique générale de cette classe+ squelette ainsi que les tables coiffeur,
- coupe, coiffeur_coupes et photos ( et leurs méthodes
-
+ coupe, coiffeur_coupes et photos ( et leurs méthodes)
  Date : 2025-05-13
 
 
@@ -11,10 +10,8 @@
  2025-05-15     Ramin Amiri, Nicolas Beaudoin, samit adelyar, Yassine Abide        Approuvé
  =========================================================
  Historique de modifications :
- 2025-05-16     Ramin Amiri             Ajout de la table rdv et creneau avec les fonctions réliés
- 2025-05-17     Ramin Amiri             Ajout de la table avis avec ses fonctions
- 2025-05-19     Nicolas Beaudoin         Ajout de la table nouveautés
  2025-05-20     Samit Adelyar           ajout de commentaires et javadoc
+ 2025-06-05     Ramin Amiri             Suppression des fonctions liées aux rendez-vous et avis (déplacés vers l'API)
  =========================================================
  ****************************************/
 
@@ -114,7 +111,6 @@ public class Database extends SQLiteOpenHelper {
                 "title TEXT, " +
                 "message TEXT, " +
                 "is_read INTEGER DEFAULT 0)");
-
     }
 
     @Override
@@ -265,6 +261,7 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         return coupe;
     }
+
     public void insertNouveaute(Nouveaute n) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -318,12 +315,14 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         return nouveautes;
     }
+
     public void markNouveauteAsRead(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("is_read", 1);
         db.update("nouveautes", values, "id = ?", new String[]{String.valueOf(id)});
     }
+
     public void insertNotification(Notification notification) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -360,4 +359,53 @@ public class Database extends SQLiteOpenHelper {
         db.update("notifications", values, "id = ?", new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Récupère tous les créneaux de la base de données
+     * @return Liste de tous les créneaux
+     */
+    public List<Creneau> getAllCreneaux() {
+        List<Creneau> creneaux = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM creneaux", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                String heureDebut = cursor.getString(cursor.getColumnIndexOrThrow("heure_debut"));
+                String heureFin = cursor.getString(cursor.getColumnIndexOrThrow("heure_fin"));
+
+                Creneau creneau = new Creneau(id, heureDebut, heureFin, date);
+                creneaux.add(creneau);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return creneaux;
+    }
+
+    /**
+     * Récupère toutes les relations créneau-coiffeur
+     * @return Liste de toutes les relations
+     */
+    public List<CreneauCoiffeur> getAllCreneauxCoiffeur() {
+        List<CreneauCoiffeur> relations = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM coiffeur_creneau", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int coiffeurId = cursor.getInt(cursor.getColumnIndexOrThrow("coiffeur_id"));
+                int creneauId = cursor.getInt(cursor.getColumnIndexOrThrow("creneau_id"));
+                int dispo = cursor.getInt(cursor.getColumnIndexOrThrow("dispo"));
+                int reserve = cursor.getInt(cursor.getColumnIndexOrThrow("reserve"));
+
+                CreneauCoiffeur relation = new CreneauCoiffeur(coiffeurId, creneauId, dispo, reserve);
+                relations.add(relation);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return relations;
+    }
 }

@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:src="@drawable/scissors"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:visibility="gone" />
 
         <!-- Nom d'utilisateur -->
         <TextView
@@ -35,13 +36,23 @@
         <!-- Étoiles de notation -->
         <LinearLayout
             android:id="@+id/etoilesContainer"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"/>
+
+
+        <!-- Titre de l'avis -->
+        <TextView
+            android:id="@+id/tvTitre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp">
-            <!-- Les étoiles seront ajoutées ici dynamiquement -->
-        </LinearLayout>
+            android:text="Expérience agréable"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
         <!-- Commentaire -->
         <TextView

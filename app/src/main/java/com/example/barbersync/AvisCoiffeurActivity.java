@@ -1,41 +1,48 @@
 /****************************************
- Fichier : AvisCoiffeurActivity.java
- Auteur : Ramin Amiri
- Fonctionnalité : MOBAVIS2 - Affiche la liste des avis pour un coiffeur spécifique
- Date : 2025-05-28
-
- Vérification :
- 2025-05-29     Samit Adelyar        Approuvé
+ * Fichier : AvisCoiffeurActivity.java
+ * Auteur : Ramin Amiri
+ * Fonctionnalité : MOBAVIS2 - Affiche la liste des avis pour un coiffeur spécifique
+ * Date : 2025-05-30
+ *
+ * Vérification :
+ * 2025-05-30     Samit Adelyar        Approuvé
  =========================================================
- Historique de modifications :
+ * Historique de modifications :
+ * 2025-05-30     Ramin Amiri           Ajout de la récupération des avis depuis l'API Flask
  =========================================================
  ****************************************/
 
 package com.example.barbersync;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Activité qui affiche tous les avis pour un coiffeur spécifique.
- * Les avis sont actuellement codés en dur car l'authentification
- * n'est pas encore complètement configurée.
+ * Les avis sont récupérés depuis l'API Flask.
  */
 public class AvisCoiffeurActivity extends AppCompatActivity {
 
-    private LinearLayout containerAvis;
+    private static final String TAG = "AvisCoiffeurActivity";
+
+    private RecyclerView recyclerViewAvis;
     private ImageButton btnRetour;
     private TextView tvTitreCoiffeur;
+    private ProgressBar progressBar;
+    private TextView tvAucunAvis;
+
     private Coiffeur coiffeur;
 
     @Override
@@ -46,131 +53,96 @@ public class AvisCoiffeurActivity extends AppCompatActivity {
         // Récupération du coiffeur depuis l'intent
         coiffeur = (Coiffeur) getIntent().getSerializableExtra("coiffeur");
         if (coiffeur == null) {
-            // Créer un coiffeur par défaut si aucun n'est passé
-            coiffeur = new Coiffeur(1, "Jack Nack", "Expert en coupes modernes.");
+            Toast.makeText(this, "Erreur: coiffeur non trouvé", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         // Initialisation des vues
         initialiserVues();
 
-        // Chargement des avis (codés en dur)
-        chargerAvis();
-
         // Configuration du bouton retour
         btnRetour.setOnClickListener(v -> finish());
+
+        // Chargement des avis depuis l'API
+        chargerAvisDepuisAPI();
     }
 
     /**
      * Initialise les références aux vues de l'activité
      */
     private void initialiserVues() {
-        containerAvis = findViewById(R.id.containerAvis);
+        recyclerViewAvis = findViewById(R.id.recyclerViewAvis);
         btnRetour = findViewById(R.id.btnRetour);
         tvTitreCoiffeur = findViewById(R.id.tvTitreCoiffeur);
+        progressBar = findViewById(R.id.progressBar);
+        tvAucunAvis = findViewById(R.id.tvAucunAvis);
+
+        // Configurer le RecyclerView
+        recyclerViewAvis.setLayoutManager(new LinearLayoutManager(this));
 
         // Définir le titre avec le nom du coiffeur
         tvTitreCoiffeur.setText("Avis sur " + coiffeur.getName());
-    }
 
-    /**
-     * Charge les avis codés en dur et les affiche
-     */
-    private void chargerAvis() {
-        List<Avis> listeAvis = creerAvisDemonstration();
-
-        LayoutInflater inflater = LayoutInflater.from(this);
-
-        for (Avis avis : listeAvis) {
-            View avisView = inflater.inflate(R.layout.item_avis, containerAvis, false);
-
-            // Récupérer les vues dans le layout de l'avis
-            TextView tvUsername = avisView.findViewById(R.id.tvUsername);
-            LinearLayout etoilesContainer = avisView.findViewById(R.id.etoilesContainer);
-            TextView tvCommentaire = avisView.findViewById(R.id.tvCommentaire);
-            ImageView imgCoupe = avisView.findViewById(R.id.imgCoupe);
-
-            // Définir les données de l'avis
-            tvUsername.setText(avis.getUsername());
-            tvCommentaire.setText(avis.getCommentaire());
-
-            // Définir l'image
-            imgCoupe.setImageResource(R.drawable.scissors);
-
-            // Afficher les étoiles selon la note
-            afficherEtoiles(etoilesContainer, avis.getNote());
-
-            // Ajouter la vue de l'avis au conteneur
-            containerAvis.addView(avisView);
+        // Masquer le message "aucun avis" par défaut
+        if (tvAucunAvis != null) {
+            tvAucunAvis.setVisibility(View.GONE);
         }
     }
 
     /**
-     * Affiche les étoiles correspondant à la note donnée
-     *
-     * @param container Le conteneur où afficher les étoiles
-     * @param note La note à représenter (de 1 à 5)
+     * Charge les avis depuis l'API Flask
      */
-    private void afficherEtoiles(LinearLayout container, int note) {
-        container.removeAllViews();
+    private void chargerAvisDepuisAPI() {
+        // Afficher le spinner de chargement
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
-        for (int i = 0; i < 5; i++) {
-            ImageView etoile = new ImageView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMarginEnd(8);
-            etoile.setLayoutParams(params);
+        // Masquer le RecyclerView pendant le chargement
+        recyclerViewAvis.setVisibility(View.GONE);
 
-            // Définir l'image de l'étoile selon la note
-            if (i < note) {
-                etoile.setImageResource(android.R.drawable.btn_star_big_on);
-            } else {
-                etoile.setImageResource(android.R.drawable.btn_star_big_off);
+        new Thread(() -> {
+            List<Avis> listeAvis = new ArrayList<>();
+
+            try {
+                // Utiliser la méthode de l'API pour récupérer les avis du coiffeur
+                Api api = new Api();
+                listeAvis = api.getAvisParCoiffeur(coiffeur.getId());
+
+                Log.d(TAG, "Avis récupérés pour " + coiffeur.getName());
+            } catch (Exception e) {
+                Log.e(TAG, "Erreur lors de la récupération des avis: " + e.getMessage());
             }
 
-            container.addView(etoile);
-        }
-    }
+            // Liste finale pour le runOnUiThread
+            final List<Avis> avisFinaux = listeAvis;
 
-    /**
-     * Crée une liste d'avis de démonstration
-     *
-     * @return Liste d'avis codés en dur
-     */
-    private List<Avis> creerAvisDemonstration() {
-        List<Avis> avis = new ArrayList<>();
+            // Mettre à jour l'interface sur le thread principal
+            runOnUiThread(() -> {
+                // Masquer le spinner
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
 
-        avis.add(new Avis("user123", 5, "Super coupe! Prix raisonnable, je vais y revenir c'est sûr!"));
-        avis.add(new Avis("user321", 2, "Pas la meilleur... au moins c'est pas cher."));
-        avis.add(new Avis("user12345", 4, "Coiffeur incroyable!"));
+                // Afficher les avis ou un message si aucun avis
+                if (!avisFinaux.isEmpty()) {
+                    AvisAdapter adapter = new AvisAdapter(this, avisFinaux);
+                    recyclerViewAvis.setAdapter(adapter);
+                    recyclerViewAvis.setVisibility(View.VISIBLE);
 
-        return avis;
-    }
+                    if (tvAucunAvis != null) {
+                        tvAucunAvis.setVisibility(View.GONE);
+                    }
+                } else {
+                    recyclerViewAvis.setVisibility(View.GONE);
 
-    /**
-     * Classe interne pour représenter un avis
-     */
-    private static class Avis {
-        private String username;
-        private int note;
-        private String commentaire;
-
-        public Avis(String username, int note, String commentaire) {
-            this.username = username;
-            this.note = note;
-            this.commentaire = commentaire;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public int getNote() {
-            return note;
-        }
-
-        public String getCommentaire() {
-            return commentaire;
-        }
+                    if (tvAucunAvis != null) {
+                        tvAucunAvis.setVisibility(View.VISIBLE);
+                        tvAucunAvis.setText("Aucun avis pour " + coiffeur.getName() + " pour le moment.\n\nSoyez le premier à laisser votre avis!");
+                    }
+                }
+            });
+        }).start();
     }
 }

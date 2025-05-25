@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:layout_marginBottom="24dp">
 
+    <!-- Jour de la semaine -->
     <TextView
         android:id="@+id/jourTextView"
         android:layout_width="match_parent"
@@ -16,17 +17,20 @@
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
+    <!-- Séparateur -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#444444"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="12dp" />
 
+    <!-- Conteneur pour les créneaux horaires -->
     <LinearLayout
         android:id="@+id/creneauxLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
         <!-- Les boutons de créneaux seront ajoutés ici dynamiquement -->
     </LinearLayout>
 </LinearLayout>

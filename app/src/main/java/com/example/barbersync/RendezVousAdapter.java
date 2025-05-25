@@ -17,6 +17,7 @@ package com.example.barbersync;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import java.util.List;
  */
 public class RendezVousAdapter extends RecyclerView.Adapter<RendezVousAdapter.RendezVousViewHolder> {
 
+    private static final String TAG = "RendezVousAdapter";
     private final Context context;
     private final List<RendezVous> rendezVousList;
     private final boolean isUpcoming; // Pour différencier les RDV à venir et passés
@@ -84,11 +86,14 @@ public class RendezVousAdapter extends RecyclerView.Adapter<RendezVousAdapter.Re
             }
 
             // Afficher le type de service et le prix
-            if (rendezVous.getTypeService() != null) {
-                holder.typeService.setText(rendezVous.getTypeService() + " - " + rendezVous.getPrix() + "$");
-            } else {
-                holder.typeService.setText("Service non spécifié");
+            String serviceInfo = "Service non spécifié";
+            if (rendezVous.getTypeService() != null && !rendezVous.getTypeService().isEmpty()) {
+                serviceInfo = rendezVous.getTypeService();
+                if (rendezVous.getPrix() > 0) {
+                    serviceInfo += " - " + rendezVous.getPrix() + "$";
+                }
             }
+            holder.typeService.setText(serviceInfo);
 
             // Gérer les boutons différemment selon le type de rendez-vous
             final int currentPosition = position;
@@ -100,9 +105,8 @@ public class RendezVousAdapter extends RecyclerView.Adapter<RendezVousAdapter.Re
                 holder.btnAction.setOnClickListener(v -> ajouterAvis(rendezVous));
             }
         } catch (Exception e) {
-            Toast.makeText(context, "Erreur lors de l'affichage du rendez-vous: " + e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            Log.e(TAG, "Erreur lors de l'affichage du rendez-vous: " + e.getMessage());
+            Toast.makeText(context, "Erreur d'affichage", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,24 +138,69 @@ public class RendezVousAdapter extends RecyclerView.Adapter<RendezVousAdapter.Re
     }
 
     /**
-     * Annule un rendez-vous à venir
+     * Annule un rendez-vous à venir avec confirmation
      *
      * @param rendezVous Le rendez-vous à annuler
      * @param position La position dans la liste
      */
     private void annulerRendezVous(RendezVous rendezVous, int position) {
         try {
-            // Pour la démonstration, afficher juste un message
-            Toast.makeText(context, "Rendez-vous annulé", Toast.LENGTH_SHORT).show();
+            // Vérifier que le client est autorisé à annuler ce rendez-vous
+            if (Client.CLIENT_COURANT == null) {
+                Toast.makeText(context, "Vous devez être connecté pour annuler un rendez-vous", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            // Supprimer de la liste et notifier l'adapter
-            rendezVousList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, rendezVousList.size());
+            if (Client.CLIENT_COURANT.getId() != rendezVous.getId_user()) {
+                Toast.makeText(context, "Vous n'êtes pas autorisé à annuler ce rendez-vous", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Créer une boîte de dialogue de confirmation
+            new androidx.appcompat.app.AlertDialog.Builder(context)
+                    .setTitle("Confirmer l'annulation")
+                    .setMessage("Êtes-vous sûr de vouloir annuler ce rendez-vous ?")
+                    .setPositiveButton("Oui", (dialog, which) -> {
+                        // Procéder à l'annulation
+                        procederAnnulation(rendezVous, position);
+                    })
+                    .setNegativeButton("Non", (dialog, which) -> {
+                        // Ne rien faire, fermer la boîte de dialogue
+                        dialog.dismiss();
+                    })
+                    .show();
         } catch (Exception e) {
-            Toast.makeText(context, "Erreur: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            Log.e(TAG, "Erreur lors de l'annulation: " + e.getMessage());
+            Toast.makeText(context, "Erreur", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Procède à l'annulation effective du rendez-vous
+     *
+     * @param rendezVous Le rendez-vous à annuler
+     * @param position La position dans la liste
+     */
+    private void procederAnnulation(RendezVous rendezVous, int position) {
+        // Annuler le rendez-vous via l'API en arrière-plan
+        new Thread(() -> {
+            Api api = new Api();
+            boolean success = api.annulerRendezVous(rendezVous.getId_rendezvous());
+
+            // Mettre à jour l'UI sur le thread principal
+            ((androidx.appcompat.app.AppCompatActivity) context).runOnUiThread(() -> {
+                if (success) {
+                    // Succès - supprimer de la liste et notifier l'adapter
+                    rendezVousList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, rendezVousList.size());
+                    Toast.makeText(context, "Rendez-vous annulé avec succès", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Échec - afficher un message d'erreur
+                    Toast.makeText(context, "Erreur lors de l'annulation. Veuillez réessayer.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }).start();
     }
 
     /**
@@ -161,13 +210,24 @@ public class RendezVousAdapter extends RecyclerView.Adapter<RendezVousAdapter.Re
      */
     private void ajouterAvis(RendezVous rendezVous) {
         try {
+            // Vérifier que le client est autorisé à ajouter un avis pour ce rendez-vous
+            if (Client.CLIENT_COURANT == null) {
+                Toast.makeText(context, "Vous devez être connecté pour ajouter un avis", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (Client.CLIENT_COURANT.getId() != rendezVous.getId_user()) {
+                Toast.makeText(context, "Vous ne pouvez ajouter un avis que pour vos propres rendez-vous", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             // Lancer l'activité d'ajout d'avis
             Intent intent = new Intent(context, AjouteAvisActivity.class);
             intent.putExtra("rendezVous", rendezVous);
             context.startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(context, "Erreur: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            Log.e(TAG, "Erreur lors de l'ajout d'avis: " + e.getMessage());
+            Toast.makeText(context, "Erreur", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -18,9 +18,7 @@
         android:theme="@style/Theme.BarberSync"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".CameraActivity"
-            android:exported="false" />
+
         <activity
             android:name=".AvisCoiffeurActivity"
             android:exported="false" />

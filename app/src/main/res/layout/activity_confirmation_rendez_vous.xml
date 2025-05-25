@@ -34,6 +34,7 @@
     </RelativeLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -196,11 +197,22 @@
                 android:id="@+id/btnReserver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reserver ?"
+                android:text="Réserver"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="#000000" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <!-- Indicateur de progression -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <include
         android:id="@+id/bottom_bar"
